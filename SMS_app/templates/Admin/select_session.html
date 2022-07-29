@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SMS | Admin | BroTeam </title>
+     <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'SMS/images/favilogo.png' %}">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{% static 'SMS/plugins/highlightjs/styles/darkula.css' %}">
+    <link href="{% static 'SMS/css/style.css' %}" rel="stylesheet">
+    {% block custom_css %}{% endblock custom_css %}
+
+</head>
+
+<body>
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <div class="brand-logo">
+                <a href="/admin_select_year">
+                    <b class="logo-abbr"><img src="{% static 'images/logo1.png'% }" alt=""> </b>
+                    <span class="logo-compact"><img src="{% static 'SMS/images/logo_text1.png'%}" alt=""></span>
+                    <span class="brand-title">
+                        <img src="{% static 'SMS/images/logo_text1.png'%}" alt="">
+                    </span>
+                </a>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            <div class="header-content clearfix">
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+                <div class="header-left">
+                    <div class="input-group icons">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                        </div>
+                        <input type="search" class="form-control input-rounded" placeholder="Search Dashboard" aria-label="Search Dashboard">
+                        <div class="drop-down d-md-none">
+							<form action="#">
+								<input type="text" class="form-control input-rounded" placeholder="Search">
+							</form>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <li class="icons dropdown">
+                              <blockquote> Trang Chủ </blockquote>
+                        </li>
+                        <li class="icons dropdown d-none d-md-flex">
+                                <div class="info">
+                                    <a href="#" class="btn mb-1 btn-outline-primary">
+                                        {{ user.username }}</a>
+                                </div>
+                        </li>
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img src="{% static 'SMS/images/user/favalogo.png' %}" height="40" width="40" alt="">
+                            </div>
+                            <div class="drop-down dropdown-profile   dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+
+                                        <li>
+                                            <a href="page-lock.html"><i class="icon-lock"></i> <span>Khoá Màn Hình</span></a>
+                                        </li>
+                                        <li><a href="/logout_user"><i class="icon-key"></i> <span>Đăng Xuất</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+
+        <div class="content-body">
+<div class="container-fluid">
+    <div class="form-group">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'error' %}
+        <div class="alert alert-danger m-b-10 m-l-5" style="margin-top:10px" id="toastr-danger-top-left">{{ message }}</div>
+        {% endif %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success m-b-10 m-l-5" style="margin-top:10px" id="toastr-success-top-left">{{ message }}</div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- general form elements -->
+                        <div class="container-fluid">
+                            <div class="row justify-content-center">
+                               <div class="row justify-content-center">
+                                <div class="card-header">
+                               <h3 class="card-title"> <br> Chọn Niên Khoá</h3>
+                                </div>
+                                <div class="col-lg-11">
+                                    <div class="card">
+                                        <div class="card-body">
+                                          <form role="form" action="/select_session_save" method="post">
+                                          {% csrf_token %}
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                      <label for="session">Niên Khoá:</label>
+                                                        <select class="form-control" id="session" name="session">
+                                                        {% for session in session_list %}
+                                                          <option value="{{session.id}}">{{session.session_start_year}} TO {{session.session_end_year}}</option>
+                                                        {% endfor %}
+                                                        </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.card-body -->
+
+                                        <div class="card-footer">
+                                          <button type="submit" class="btn btn-primary btn-block">Vào Trang Chủ</button>
+                                        </div>
+                                      </form>
+                                        </div>
+                                    </div>
+                                </div>
+                               </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+            <!-- #/ container -->
+
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p> Designed & Developed by <a href="/broteam">BroTeam</a> 2021</p>
+            </div>
+        </div>
+
+    <script src="{% static 'js/gleek.js' %}"></script>
+
+    <script src="{% static 'SMS/plugins/common/common.min.js' %}"></script>
+    <script src="{% static 'SMS/js/custom.min.js' %}"></script>
+    <script src="{% static 'SMS/js/settings.js' %}"></script>
+    <script src="{% static 'SMS/js/styleSwitcher.js' %}"></script>
+
+    <script src="{% static 'SMS/plugins/highlightjs/highlight.pack.min.js' %}"></script>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script>
+        (function($) {
+        "use strict"
+
+            new quixSettings({
+                version: "light", //2 options "light" and "dark"
+                layout: "horizontal", //2 options, "vertical" and "horizontal"
+                navheaderBg: "color_1", //have 10 options, "color_1" to "color_10"
+                headerBg: "color_1", //have 10 options, "color_1" to "color_10"
+                sidebarStyle: "vertical", //defines how sidebar should look like, options are: "full", "compact", "mini" and "overlay". If layout is "horizontal", sidebarStyle won't take "overlay" argument anymore, this will turn into "full" automatically!
+                sidebarBg: "color_1", //have 10 options, "color_1" to "color_10"
+                sidebarPosition: "static", //have two options, "static" and "fixed"
+                headerPosition: "static", //have two options, "static" and "fixed"
+                containerLayout: "wide",  //"boxed" and  "wide". If layout "vertical" and containerLayout "boxed", sidebarStyle will automatically turn into "overlay".
+                direction: "ltr" //"ltr" = Left to Right; "rtl" = Right to Left
+            });
+
+
+        })(jQuery);
+
+    </script>
+{% block custom_js %}
+{% endblock custom_js %}
+</body>
+
+</html>

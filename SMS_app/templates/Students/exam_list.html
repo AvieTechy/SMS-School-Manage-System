@@ -1,0 +1,99 @@
+{% extends 'Students/base_student.html' %}
+{% block page_title %}
+Thông báo của học sinh
+{% endblock page_title %}
+   {% block custom_css %}
+<style>
+div.ex1 {
+  width: 100%;
+  height: 500px;
+  overflow: scroll;
+}
+</style>
+{% endblock custom_css %}
+
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content-body">
+        <div class="row page-titles mx-0">
+            <div class="col p-md-0">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="/student_home">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="">Thông Báo</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h4>Bài Kiểm Tra</h4>
+                                </div>
+                                <div class="ex1">
+                                <div class="table-responsive">
+                                    <table class="table header-border table-hover verticle-middle">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Bài Kiểm Tra</th>
+                                                <th scope="col">Môn</th>
+                                                <th scope="col">Thời Hạn</th>
+                                                <th scope="col">Thành Tích</th>
+                                                <th scope="col">Điểm</th>
+                                                <th scope="col">Trạng Thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for exam in exams_info %}
+                                            <tr>
+                                                <td><b>{{exam.exam.name}}</b></td>
+                                                <td>{{exam.exam.sub}}</td>
+                                                <td>{{exam.exam.date}}<br><small><b>{{exam.exam.start}} - {{exam.exam.end}}</b></small></td>
+
+                                                {% if exam.stn_exam.finish == True %}
+                                                <td>
+                                                    <div class="progress" style="height: 10px">
+                                                        <div class="progress-bar gradient-1" style="width: {{exam.per}}%;" role="progressbar"><span class="sr-only">70% Complete</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="label gradient-1 btn-rounded">{{exam.stn_exam.sum}}</span>
+                                                </td>
+                                                <td><a href="/finish_exam/{{exam.exam.id}}" class="btn mb-1 btn-rounded btn-info">Xem Lại</a></td>
+
+                                                {%else%}
+                                                <td></td>
+                                                <td></td>
+                                                {%if now < exam.exam.date or now == exam.exam.date and time < exam.exam.start %}
+                                                <td><span class="label label-pill label-info">Chưa tới giờ <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+</svg></span></td>
+                                                {%else%}
+                                                {% if now == exam.exam.date and time > exam.exam.start and time < exam.exam.end %}
+                                                    <td><a href="/start_exam/{{exam.exam.id}}/{{stn_id}}" class="btn mb-1 btn-rounded btn-outline-primary">Làm Bài</a></td>
+                                                {%else%}
+                                                    <td><span class="label label-pill label-danger">Hết Giờ <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-flag-fill" viewBox="0 0 16 16">
+  <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>
+</svg></span></td>
+                                                {% endif%}
+
+                                                {% endif%}
+                                                {%endif%}
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+
+

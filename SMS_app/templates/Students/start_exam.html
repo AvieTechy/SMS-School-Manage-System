@@ -1,0 +1,455 @@
+{% extends 'Students/base_student.html' %}
+{% block page_title %}
+Bài Kiểm Tra {{exam_id}}
+{% endblock page_title %}
+{% load static %}
+{% block custom_css %}
+<link href="{% static 'SMS/plugins/toastr/css/toastr.min.css' %}" rel="stylesheet">
+
+<style>
+.base-timer {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.base-timer__svg {
+  transform: scaleX(-1);
+}
+
+.base-timer__circle {
+  fill: none;
+  stroke: none;
+}
+
+.base-timer__path-elapsed {
+  stroke-width: 7px;
+  stroke: grey;
+}
+
+.base-timer__path-remaining {
+  stroke-width: 7px;
+  stroke-linecap: round;
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: 1s linear all;
+  fill-rule: nonzero;
+  stroke: currentColor;
+}
+
+.base-timer__path-remaining.green {
+  color: rgb(65, 184, 131);
+}
+
+.base-timer__path-remaining.orange {
+  color: orange;
+}
+
+.base-timer__path-remaining.red {
+  color: red;
+}
+
+.base-timer__label {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+}
+.ex3 {
+  height: 300px;
+  padding-left: 10px;
+  width: auto;
+  overflow-y: auto;
+}
+#mydiv {
+
+display: none;
+background-color:white;
+
+}
+
+#mydiv:full-screen { display: block; }
+
+#mydiv:-moz-full-screen {  display: block; }
+
+#mydiv:-webkit-full-screen {  display: block; }
+
+.container {
+    display: inline-block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+
+</style>
+
+{% endblock custom_css %}
+
+{% block main_content %}
+    <div class="content-body">
+<div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/{{id}}/teacher_home">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Bài Kiểm Tra</a></li>
+                    </ol>
+                </div>
+            </div>
+<center>
+
+    <div id="mydiv" >
+            <div class="row">
+                <div class="col-4">
+                    <center>
+                    <blockquote class="text-center">Thời Gian</blockquote>
+                    <div id="app"></div>
+
+                        <blockquote class="text-center">Đáp Án Của Bạn</blockquote>
+                        <form role="form" name="myform" id="myform" action="/save_answer_student/{{exam_id}}" method="post" >
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Câu hỏi</th>
+                                                <th>Đáp Án</th>
+                                            </tr>
+                                        </thead>
+                            </table>
+                            <div class="ex3">
+                                          {% csrf_token %}
+                                <input type="hidden" name="timel" class="form-control" id="timel">
+                                <table class="table table-bordered">
+                                        <tbody>
+
+                                        {% for que in ques %}
+                                            <tr>
+                                                <th>{{que.ques_num}}</th>
+                                                <th>
+                                                    <div class="row">
+                                                    <div class="col-3">
+                                                        <label class="container">A
+                                                      <input type="radio" name="{{que.ques_num}}" value="A">
+                                                      <span class="checkmark"></span>
+                                                    </label>
+                                                        </div>
+                                                        <div class="col-3">
+                                                        <label class="container">B
+                                                      <input type="radio" name="{{que.ques_num}}" value="B">
+                                                      <span class="checkmark"></span>
+                                                    </label>
+                                                        </div>
+                                                        <div class="col-3">
+                                                        <label class="container">C
+                                                      <input type="radio" name="{{que.ques_num}}" value="C">
+                                                      <span class="checkmark"></span>
+                                                    </label>
+                                                        </div>
+                                                        <div class="col-3">
+                                                        <label class="container">D
+                                                      <input type="radio" name="{{que.ques_num}}" value="D">
+                                                      <span class="checkmark"></span>
+                                                    </label>
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        {%endfor%}
+                                        </tbody>
+                                    </table>
+
+                                 </div>
+                                </div>
+                        <div class="row justify-content-center">
+                                            <div class="card-footer">
+                                                <button type="submit" class="btn btn-primary btn-block">Nộp Bài</button>
+                                            </div>
+                                        </div>
+                        </form>
+                    </center>
+                </div>
+                <div class="col-8">
+                    <blockquote class="text-center">Đề Bài</blockquote>
+                    <iframe src="{{exam.file}}#toolbar=0&navpanes=0&scrollbar=0" width="100%" height="1000px">file đề</iframe>
+                </div>
+            </div>
+
+    </div>
+
+</center>
+            <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% if message.tags == 'success' %}
+                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                </div>
+                                <h4 class="card-title">Bài Kiểm Tra</h4>
+                                <div class="timeout" style="display:none;">Điểm Của bạn:{{stn_exam.sum}}</div>
+                                <div class="timeon" style="display:none;">
+                                <div class="container">
+                                <blockquote class="text-center">Thông Tin</blockquote>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <ul class="list-icons">
+                                                <li><h6>Tên Bài Kiểm Tra<i class="ti-angle-right"></i><b>{{exam.name}}</b></h6></li>
+                                                <li><h6>Lớp Thực Hiện<i class="ti-angle-right"></i><b> {{exam.class_id.class_name}}</b></h6></li>
+                                                <li><h6>Hệ Số<i class="ti-angle-right"></i> <b>{{exam.mul}}</b></h6></li>
+                                                <li><h6>Ngày Thực Hiện<i class="ti-angle-right"></i><b>{%if exam.form == "TN" %}Trắc Nghiệm {%else%} Tự Luận {%endif%}</b></h6></li>
+                                                <li><h6>Trạng Thái<i class="ti-angle-right"></i><b>{%if exam.is_active == True %} Chưa Hoàn Thành {%else%} Đã Hoàn Thành {%endif%}</b></h6></li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="col-6">
+                                            <ul class="list-icons">
+                                                <li><h6>Ngày Thực Hiện<i class="ti-angle-right"></i><b>{{exam.date}}</b></h6></li>
+                                                <li><h6>Thời Gian Bắt Đầu<i class="ti-angle-right"></i><b>{{exam.start}}</b></h6></li>
+                                                <li><h6>Thời Gian Kết Thúc<i class="ti-angle-right"></i><b>{{exam.end}}</b></h6></li>
+                                                <li><button type="button" onclick="openFullscreen(mydiv);" class="btn mb-1 btn-success" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Cho phép bật chế độ toàn màn hình để bắt đầu kiểm tra">Vào Làm Bài <span class="btn-icon-right"><i class="fa fa-check"></i></span></button></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                                <span id="toastr"></span>
+
+                        </div>
+            </div>
+    </div>
+
+{% endblock main_content %}
+{% block custom_js %}
+    <script src="{% static 'SMS/plugins/tables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/tables/js/datatable/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/tables/js/datatable-init/datatable-basic.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/toastr/js/toastr.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/toastr/js/toastr.init.js' %}"></script>
+
+<script>
+if({{d}}>0){
+var cnt ={{stn_exam.is_active}};
+
+        function openFullscreen(elem) {
+        cnt+=1
+        var id = {{stn_exam.id}};
+          console.log(id);
+          $.ajax({
+            url:'{% url 'change_warning' %}',
+            type:'POST',
+            data:{id:id,cnt:cnt},
+            })
+            .done(function(response){
+                if(response>0){
+                $("#turn").text(cnt);
+                 $('.alert').show();
+                 $("#toastr").show(function(){toastr.error("Bạn đã thoát khỏi không gian bài làm "+cnt+" lần! Hãy trở lại để tiếp tục...!","CẢNH BÁO",{positionClass:"toast-bottom-right",timeOut:6e3,closeButton:!0,debug:!1,newestOnTop:!0,progressBar:!0,preventDuplicates:!0,onclick:null,showDuration:"300",hideDuration:"1000",extendedTimeOut:"1000",showEasing:"swing",hideEasing:"linear",showMethod:"fadeIn",hideMethod:"fadeOut",tapToDismiss:!1})})
+                }
+
+            });
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+          } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+          } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen()
+          }
+          console.log(cnt);
+        }
+        var elem = document.getElementById("mydiv");
+
+        }
+</script>
+<script>
+const FULL_DASH_ARRAY = 283;
+const WARNING_THRESHOLD = 10;
+const ALERT_THRESHOLD = 5;
+
+const COLOR_CODES = {
+  info: {
+    color: "green"
+  },
+  warning: {
+    color: "orange",
+    threshold: WARNING_THRESHOLD
+  },
+  alert: {
+    color: "red",
+    threshold: ALERT_THRESHOLD
+  }
+};
+if ({{d}}==0){
+$('.timeout').show();
+}
+ else {
+
+$('.timeon').show();
+const TIME_LIMIT = {{d}};
+let timePassed = 0;
+let timeLeft = TIME_LIMIT;
+let timerInterval = null;
+let remainingPathColor = COLOR_CODES.info.color;
+
+document.getElementById("app").innerHTML = `
+<div class="base-timer">
+  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g class="base-timer__circle">
+      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+      <path
+        id="base-timer-path-remaining"
+        stroke-dasharray="283"
+        class="base-timer__path-remaining ${remainingPathColor}"
+        d="
+          M 50, 50
+          m -45, 0
+          a 45,45 0 1,0 90,0
+          a 45,45 0 1,0 -90,0
+        "
+      ></path>
+    </g>
+  </svg>
+  <span id="base-timer-label" class="base-timer__label">${formatTime(
+    timeLeft
+  )}</span>
+</div>
+`;
+
+startTimer();
+
+function onTimesUp() {
+  clearInterval(timerInterval);
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timePassed = timePassed += 1;
+    timeLeft = TIME_LIMIT - timePassed;
+    document.getElementById("timel").value = timePassed;
+
+    document.getElementById("base-timer-label").innerHTML = formatTime(
+      timeLeft
+    );
+    setCircleDasharray();
+    setRemainingPathColor(timeLeft);
+
+    if (timeLeft === 0) {
+      onTimesUp();
+       document.getElementById("myform").submit();
+    }
+  }, 1000);
+}
+
+function formatTime(time) {
+  const minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+
+  return `${minutes}:${seconds}`;
+}
+
+function setRemainingPathColor(timeLeft) {
+  const { alert, warning, info } = COLOR_CODES;
+  if (timeLeft <= alert.threshold) {
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(warning.color);
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(alert.color);
+  } else if (timeLeft <= warning.threshold) {
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(info.color);
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(warning.color);
+  }
+}
+
+function calculateTimeFraction() {
+  const rawTimeFraction = timeLeft / TIME_LIMIT;
+  return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+}
+
+function setCircleDasharray() {
+  const circleDasharray = `${(
+    calculateTimeFraction() * FULL_DASH_ARRAY
+  ).toFixed(0)} 283`;
+  document
+    .getElementById("base-timer-path-remaining")
+    .setAttribute("stroke-dasharray", circleDasharray);
+  }
+}
+</script>
+{% endblock custom_js %}

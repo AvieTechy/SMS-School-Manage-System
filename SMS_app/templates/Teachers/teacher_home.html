@@ -1,0 +1,354 @@
+{% extends 'Teachers/base_teacher.html' %}
+{% block page_title %}
+Home
+{% endblock page_title %}
+{% load static %}
+{% block custom_css %}
+<!-- Pignose Calender -->
+    <link href="{% static 'SMS/plugins/pg-calendar/css/pignose.calendar.min.css' %}" rel="stylesheet">
+    <!-- Chartist -->
+    <link rel="stylesheet" href="{% static 'SMS/plugins/chartist/css/chartist.min.css'%}">
+    <link rel="stylesheet" href="{% static 'SMS/plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css'%}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <link rel="stylesheet" href="{% static 'SMS/style.css' %}">
+
+{% endblock custom_css %}
+
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content-body">
+        <div class="container-fluid mt-3">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card gradient-1">
+                      <div class="card-body">
+                          <h3 class="card-title text-white">Lớp Đang Chủ Nhiệm</h3>
+                          <div class="d-inline-block">
+                              <h2 class="text-white">{{CN}}</h2>
+                              <a href="" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                          </div>
+                          <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card gradient-2">
+                      <div class="card-body">
+                          <h3 class="card-title text-white"> Số lớp đang phụ trách</h3>
+                          <div class="d-inline-block">
+                              <h2 class="text-white">{{ classes_cnt }}</h2>
+                              <a href="" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                          </div>
+                          <span class="float-right display-5 opacity-5"><i class="fas fa-book-reader"></i></span>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card gradient-3">
+                      <div class="card-body">
+                          <h3 class="card-title text-white">Tổng số Vắng</h3>
+                          <div class="d-inline-block">
+                              <h2 class="text-white"></h2>
+                              <a href="" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                          </div>
+                          <span class="float-right display-5 opacity-5"><i class="fas fa-book-open"></i></span>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card gradient-4">
+                      <div class="card-body">
+                          <h3 class="card-title text-white"> Tổng số Môn</h3>
+                          <div class="d-inline-block">
+                              <h2 class="text-white"></h2>
+                              <a href="#" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                          </div>
+                          <span class="float-right display-5 opacity-5"><i class="fas fa-book"></i></span>
+                      </div>
+                    </div>
+                </div>
+            </div>
+                    <div class="form-row align-items-center">
+                        <div class="card card-primary">
+                        <div class="card-body">
+                            <div class="row justify-content-center ">
+                                <h3>Buổi Sáng</h3>
+                                <div class="timetable">
+                                    <div class="week-names">
+                                        <div style="background-color:#E5CFE5;"><b>Thứ hai</b></div>
+                                        <div style="background-color:#E5CFE5;"><b>Thứ ba</b></div>
+                                        <div style="background-color:#E5CFE5;"><b>Thứ tư</b></div>
+                                        <div style="background-color:#E5CFE5;"><b>Thứ năm</b></div>
+                                        <div style="background-color:#E5CFE5;"><b>Thứ sáu</b></div>
+                                        <div style="background-color:#E5CFE5;"><b>Thứ bảy</b></div>
+                                        <div class="weekend" style="background-color:#E5CFE5;"><b>Chủ Nhật</b></div>
+                                    </div>
+                                    <div class="time-interval">
+                                        {% for l in lts_mor %}
+
+                                        <div style="background-color:#E5CFE5; text-align: center;" data-toggle="modal" data-target="#exampleModalpopover"><b>{{l.time_start}} - {{l.time_end}}</b></div>
+                                                                {% endfor %}
+                                    </div>
+                                    <div class="content" >
+                                        {% for time in timetable_mor %}
+                                        {%if time.subject != null %}
+                                        <div class="accent-pink-gradient" style="background-color:#FDFDFD;" data-toggle="modal" data-target="#exampleModalpopover">Lớp:{{time.class_id.class_name}}<br> Môn:{{time.subject}}</div>
+                                        {% else %}
+                                        <div style="background-color:#FDFDFD;"></div>
+                                        {%endif%}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <h3>Buổi Chiều</h3>
+                                <div class="timetable1">
+                                    <div class="week-names">
+                                        <div style="background-color:#CADEFC;"><b>Thứ hai</b></div>
+                                        <div style="background-color:#CADEFC;"><b>Thứ ba</b></div>
+                                        <div style="background-color:#CADEFC;"><b>Thứ tư</b></div>
+                                        <div style="background-color:#CADEFC;"><b>Thứ năm</b></div>
+                                        <div style="background-color:#CADEFC;"><b>Thứ sáu</b></div>
+                                        <div style="background-color:#CADEFC;"><b>Thứ bảy</b></div>
+                                        <div class="weekend" style="background-color:#CADEFC;"><b>Chủ Nhật</b></div>
+                                    </div>
+                                    <div class="time-interval1">
+                                        {% for l in lts_aft %}
+                                        <div style="background-color:#CADEFC;"><b>{{l.time_start}} - {{l.time_end}}</b></div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="content1">
+                                        {% for time in timetable_aft %}
+                                        {%if time.subject != null %}
+                                        <div class="accent-blue-gradient" style="background-color:#FDFDFD;">Lớp:{{time.class_id.class_name}}<br> Môn:{{time.subject}}</div>
+                                        {% else %}
+                                        <div style="background-color:#FDFDFD;"></div>
+                                        {%endif%}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+        </div>
+
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+           var pieData  = {
+              labels: [
+                  'Có Mặt',
+                  'Vắng'
+              ],
+              datasets: [
+                {
+                  data: [{{ attendance_count }},{{ leave_count }}],
+                  backgroundColor : ['#00a65a', '#f56954'],
+                }
+              ]
+            }
+            var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+            var pieOptions     = {
+              maintainAspectRatio : false,
+              responsive : true,
+            }
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            var pieChart = new Chart(pieChartCanvas, {
+              type: 'pie',
+              data: pieData,
+              options: pieOptions
+            });
+
+
+                var attendance_list={{ attendance_list }};
+                var subject_list={{ subject_list|safe }};
+                var barChartData = {
+                  labels  : subject_list,
+                  datasets: [
+                    {
+                      label               : 'Số lần tham dự tiết học',
+                      backgroundColor     : 'rgba(60,141,188,0.9)',
+                      borderColor         : 'rgba(60,141,188,0.8)',
+                      pointRadius          : false,
+                      pointColor          : '#3b8bba',
+                      pointStrokeColor    : 'rgba(60,141,188,1)',
+                      pointHighlightFill  : '#fff',
+                      pointHighlightStroke: 'rgba(60,141,188,1)',
+                      data                : attendance_list
+                    }
+                  ]
+                }
+                var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                var temp0 = barChartData.datasets[0]
+                barChartData.datasets[0] = temp0
+
+                var barChartOptions = {
+                  responsive              : true,
+                  maintainAspectRatio     : false,
+                  datasetFill             : false
+                }
+
+                var barChart = new Chart(barChartCanvas, {
+                  type: 'bar',
+                  data: barChartData,
+                  options: barChartOptions
+                })
+
+
+                var student_list={{ student_list|safe }};
+                var present_list={{ present_list }};
+                var absent_list={{ absent_list }};
+                 var barChartData2 = {
+                  labels  : student_list,
+                  datasets: [
+                    {
+                      label               : 'Có Mặt',
+                      backgroundColor     : 'rgba(60,141,188,0.9)',
+                      borderColor         : 'rgba(60,141,188,0.8)',
+                      pointRadius          : false,
+                      pointColor          : '#3b8bba',
+                      pointStrokeColor    : 'rgba(60,141,188,1)',
+                      pointHighlightFill  : '#fff',
+                      pointHighlightStroke: 'rgba(60,141,188,1)',
+                      data                : present_list
+                    },
+                    {
+                      label               : 'Vắng',
+                      backgroundColor     : 'rgba(200,141,188,0.9)',
+                      borderColor         : 'rgba(200,141,188,0.8)',
+                      pointRadius          : false,
+                      pointColor          : '#3b8bba',
+                      pointStrokeColor    : 'rgba(60,141,188,1)',
+                      pointHighlightFill  : '#fff',
+                      pointHighlightStroke: 'rgba(60,141,188,1)',
+                      data                : absent_list
+                    }
+                  ]
+                }
+                var barChartCanvas2 = $('#barChart2').get(0).getContext('2d')
+                var temp2 = barChartData2.datasets[0]
+                barChartData2.datasets[0] = temp2
+
+                var barChartOptions2 = {
+                  responsive              : true,
+                  maintainAspectRatio     : false,
+                  datasetFill             : false
+                }
+
+                var barChart2 = new Chart(barChartCanvas2, {
+                  type: 'bar',
+                  data: barChartData2,
+                  options: barChartOptions2
+                })
+
+    });
+</script>
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-messaging.js"></script>
+<script>
+
+    var firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "FIREBASE_AUTH_URL",
+        databaseURL: "FIREBASE_DATABASE_URL",
+        projectId: "FIREBASE_PROJECT_ID",
+        storageBucket: "FIREBASE_STORAGE_BUCKET_URL",
+        messagingSenderId: "FIREBASE_SENDER_ID",
+        appId: "FIREBASE_APP_ID",
+        measurementId: "FIREBASE_MEASUREMENT_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const messaging=firebase.messaging();
+
+    function IntitalizeFireBaseMessaging() {
+        messaging
+            .requestPermission()
+            .then(function () {
+                console.log("Notification Permission");
+                return messaging.getToken();
+            })
+            .then(function (token) {
+                console.log("Token : "+token);
+                sendToServer(token);
+            })
+            .catch(function (reason) {
+                console.log(reason);
+            });
+    }
+
+    messaging.onMessage(function (payload) {
+        console.log(payload);
+        const notificationOption={
+            body:payload.notification.body,
+            icon:payload.notification.icon
+        };
+
+        if(Notification.permission==="granted"){
+            var notification=new Notification(payload.notification.title,notificationOption);
+
+            notification.onclick=function (ev) {
+                ev.preventDefault();
+                window.open(payload.notification.click_action,'_blank');
+                notification.close();
+            }
+        }
+
+    });
+    messaging.onTokenRefresh(function () {
+        messaging.getToken()
+            .then(function (newtoken) {
+                console.log("New Token : "+ newtoken);
+                sendToServer(newtoken);
+            })
+            .catch(function (reason) {
+                console.log(reason);
+            })
+    });
+
+    function sendToServer(token){
+         $.ajax({
+                url:'{% url 'staff_fcmtoken_save' %}',
+                type:'POST',
+                data:{token:token},
+            })
+            .done(function(response){
+                if(response=="True"){
+                    console.log("Token Save");
+                }
+                else{
+                    console.log("Error in Token Save");
+                }
+            });
+    }
+    IntitalizeFireBaseMessaging();
+</script>
+ <script src="{% static 'SMS/plugins/chart.js/Chart.bundle.min.js' %}"></script>
+    <!-- Circle progress -->
+    <script src="{% static 'SMS/plugins/circle-progress/circle-progress.min.js' %}"></script>
+    <!-- Datamap -->
+    <script src="{% static 'SMS/plugins/d3v3/index.js' %}"></script>
+    <script src="{% static 'SMS/plugins/topojson/topojson.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/datamaps/datamaps.world.min.js' %}"></script>
+    <!-- Morrisjs -->
+    <script src="{% static 'SMS/plugins/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/morris/morris.min.js' %}"></script>
+    <!-- Pignose Calender -->
+    <script src="{% static 'SMS/plugins/moment/moment.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/pg-calendar/js/pignose.calendar.min.js' %}"></script>
+    <!-- ChartistJS -->
+    <script src="{% static 'SMS/plugins/chartist/js/chartist.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js' %}"></script>
+    <script src="{% static 'SMS/js/dashboard/dashboard-1.js' %}"></script>
+
+  <script src="{% static 'SMS/plugins/flot/js/jquery.flot.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.spline.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.init.js' %}"></script>
+    <script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+{% endblock custom_js %}

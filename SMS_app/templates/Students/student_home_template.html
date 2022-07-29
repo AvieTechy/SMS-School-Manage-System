@@ -1,0 +1,297 @@
+{% extends 'Students/base_student.html' %}
+{% block page_title %}
+Home
+{% endblock page_title %}
+{% load static%}
+{% block custom_css %}
+<!-- Pignose Calender -->
+     <link href="{% static 'SMS/plugins/pg-calendar/css/pignose.calendar.min.css' %}" rel="stylesheet">
+    <!-- Chartist -->
+    <link rel="stylesheet" href="{% static 'SMS/plugins/chartist/css/chartist.min.css'%}">
+    <link rel="stylesheet" href="{% static 'SMS/plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css'%}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock custom_css %}
+
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content-body">
+        <div class="container-fluid mt-3">
+            {% if class_room.count > 0 %}
+                    <div class="row">
+                        <div class="col-lg-12 form-group" >
+                            {% for class_single in class_room %}
+                                <a href="/join_class_room/{{ class_single.subject.id }}/{{ class_single.session_years.id }}" class="btn btn-success">Tham Gia Lớp Học {{ class_single.subject.subject_name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+              {% endif %}
+          <div class="row">
+              <div class="col-lg-3 col-sm-6">
+                  <div class="card gradient-1">
+                      <div class="card-body">
+                          <h3 class="card-title text-white">Tổng Điểm Danh</h3>
+                          <div class="d-inline-block">
+                              <h2 class="text-white">{{ total_attendance }}</h2>
+                              <a href="{% url 'student_view_attendance' %}" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                          </div>
+                          <span class="float-right display-5 opacity-5"><i class="fas fa-users"></i></span>
+                      </div>
+                  </div>
+              </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card gradient-2">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">Tổng Vắng</h3>
+                                <div class="d-inline-block">
+                                    <h2 class="text-white">{{ attendance_absent }}</h2>
+                                     <a href="{% url 'student_view_attendance' %}" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                                </div>
+                                <span class="float-right display-5 opacity-5"><i class="fas fa-book-open"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card gradient-3">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">Tổng Có Mặt</h3>
+                                <div class="d-inline-block">
+                                    <h2 class="text-white">{{ attendance_present }}</h2>
+                                    <a href="{% url 'student_view_attendance' %}" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                                </div>
+                                <span class="float-right display-5 opacity-5"><i class="fas fa-book-reader"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card gradient-4">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">Tổng Môn Học</h3>
+                                <div class="d-inline-block">
+                                    <h2 class="text-white">{{ subjects }}</h2>
+                                    <a href="#" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                                </div>
+                                <span class="float-right display-5 opacity-5"><i class="fa fa-book"></i></span>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+          <div class="row">
+              <div class="col-lg-6">
+                  <div class="card card-danger">
+                      <div class="card-header">
+                        <h3 class="card-title">Biểu Đồ Điểm Danh</h3>
+                      </div>
+                      <div class="card-body">
+                        <canvas id="pieChart" class="flot-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                      </div>
+                      <!-- /.card-body -->
+                  </div>
+                    <!-- /.card -->
+              </div>
+              <div class="col-lg-6">
+                  <div class="card card-success">
+                      <div class="card-header">
+                        <h3 class="card-title">Thống Kê Tham Dự Lớp Học</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="chart">
+                          <canvas id="barChart" class="flot-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+            <!-- /.card -->
+              </div>
+          </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+
+            var subjects={{ data_name|safe }};
+            var data1={{ data1 }};
+            var data2={{ data2 }};
+            //Data Set for PIE CHart
+           var pieData  = {
+              labels: [
+                  'Vắng',
+                  'Có Mặt',
+              ],
+              datasets: [
+                {
+                  data: [{{ attendance_absent }},{{ attendance_present }}],
+                  backgroundColor : ['#B22222', '#3CB371'],
+                }
+              ]
+            }
+
+
+            //Data Set for Bar Chart
+                var areaChartData = {
+                  labels  : subjects,
+                  datasets: [
+                    {
+                      label               : 'Có Mặt',
+                      backgroundColor     : 'rgba(60,141,188,0.9)',
+                      borderColor         : 'rgba(60,141,188,0.8)',
+                      pointRadius          : false,
+                      pointColor          : '#3b8bba',
+                      pointStrokeColor    : 'rgba(60,141,188,1)',
+                      pointHighlightFill  : '#fff',
+                      pointHighlightStroke: 'rgba(60,141,188,1)',
+                      data                : data1
+                    },
+                    {
+                      label               : 'Vắng',
+                      backgroundColor     : 'rgba(210, 214, 222, 1)',
+                      borderColor         : 'rgba(210, 214, 222, 1)',
+                      pointRadius         : false,
+                      pointColor          : 'rgba(210, 214, 222, 1)',
+                      pointStrokeColor    : '#c1c7d1',
+                      pointHighlightFill  : '#fff',
+                      pointHighlightStroke: 'rgba(220,220,220,1)',
+                      data                : data2
+                    },
+                  ]
+                }
+
+
+            var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+            var pieOptions     = {
+              maintainAspectRatio : false,
+              responsive : true,
+            }
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            var pieChart = new Chart(pieChartCanvas, {
+              type: 'pie',
+              data: pieData,
+              options: pieOptions
+            });
+
+
+            var barChartCanvas = $('#barChart').get(0).getContext('2d')
+            var barChartData = jQuery.extend(true, {}, areaChartData)
+            var temp1 = areaChartData.datasets[0]
+            barChartData.datasets[0] = temp1
+
+            var barChartOptions = {
+              responsive              : true,
+              maintainAspectRatio     : false,
+              datasetFill             : false
+            }
+
+            var barChart = new Chart(barChartCanvas, {
+              type: 'bar',
+              data: barChartData,
+              options: barChartOptions
+            })
+    })
+</script>
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-messaging.js"></script>
+<script>
+    var firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "FIREBASE_AUTH_URL",
+        databaseURL: "FIREBASE_DATABASE_URL",
+        projectId: "FIREBASE_PROJECT_ID",
+        storageBucket: "FIREBASE_STORAGE_BUCKET_URL",
+        messagingSenderId: "FIREBASE_SENDER_ID",
+        appId: "FIREBASE_APP_ID",
+        measurementId: "FIREBASE_MEASUREMENT_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const messaging=firebase.messaging();
+
+    function IntitalizeFireBaseMessaging() {
+        messaging
+            .requestPermission()
+            .then(function () {
+                console.log("Notification Permission");
+                return messaging.getToken();
+            })
+            .then(function (token) {
+                console.log("Token : "+token);
+                sendToServer(token);
+            })
+            .catch(function (reason) {
+                console.log(reason);
+            });
+    }
+
+    messaging.onMessage(function (payload) {
+        console.log(payload);
+        const notificationOption={
+            body:payload.notification.body,
+            icon:payload.notification.icon
+        };
+
+        if(Notification.permission==="granted"){
+            var notification=new Notification(payload.notification.title,notificationOption);
+
+            notification.onclick=function (ev) {
+                ev.preventDefault();
+                window.open(payload.notification.click_action,'_blank');
+                notification.close();
+            }
+        }
+
+    });
+    messaging.onTokenRefresh(function () {
+        messaging.getToken()
+            .then(function (newtoken) {
+                console.log("New Token : "+ newtoken);
+                sendToServer(newtoken);
+            })
+            .catch(function (reason) {
+                console.log(reason);
+            })
+    });
+
+    function sendToServer(token){
+         $.ajax({
+                url:'{% url 'student_fcmtoken_save' %}',
+                type:'POST',
+                data:{token:token},
+            })
+            .done(function(response){
+                if(response=="True"){
+                    console.log("Token Save")
+                }
+                else{
+                    console.log("Error in Token Save")
+                }
+            });
+    }
+    IntitalizeFireBaseMessaging();
+</script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.spline.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.init.js' %}"></script>
+    <script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+
+    <script src="{% static 'SMS/plugins/chart.js/Chart.bundle.min.js' %}"></script>
+    <!-- Circle progress -->
+    <script src="{% static 'SMS/plugins/circle-progress/circle-progress.min.js' %}"></script>
+    <!-- Datamap -->
+    <script src="{% static 'SMS/plugins/d3v3/index.js' %}"></script>
+    <script src="{% static 'SMS/plugins/topojson/topojson.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/datamaps/datamaps.world.min.js' %}"></script>
+    <!-- Morrisjs -->
+    <script src="{% static 'SMS/plugins/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/morris/morris.min.js' %}"></script>
+    <!-- Pignose Calender -->
+    <script src="{% static 'SMS/plugins/moment/moment.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/pg-calendar/js/pignose.calendar.min.js' %}"></script>
+    <!-- ChartistJS -->
+    <script src="{% static 'SMS/plugins/chartist/js/chartist.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js' %}"></script>
+    <script src="{% static 'SMS/js/dashboard/dashboard-1.js' %}"></script>
+
+{% endblock custom_js %}

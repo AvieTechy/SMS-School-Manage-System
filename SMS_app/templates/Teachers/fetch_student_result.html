@@ -1,0 +1,180 @@
+{% extends 'Teachers/base_teacher.html' %}
+{% block page_title %}
+Bảng Điểm lớp {{ classe.class_name }}
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+      <section class="content-body">
+        <div class="row page-titles mx-0">
+            <div class="col p-md-0">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="/{{id}}/teacher_home">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="">Thông Báo</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h4>Bảng Điểm lớp {{classe.class_name}}</h4>
+                                </div>
+                                <div class="form-row align-items-center">
+                                    <div class="col-auto my-1">
+                                        <label class="mr-sm-2" >Lớp</label>
+                                        <input type="text" class="form-control" name="classe" value="{{ classe.class_name }}" disabled="disabled">
+
+                                        <input type="text" class="form-control" hidden id="classe" name="classe" value="{{ classe.id }}" disabled="disabled">
+
+                                    </div>
+                                    <div class="col-auto my-1">
+                                        <label class="mr-sm-2" for="term">Học Kỳ</label>
+                                        <select class="custom-select mr-sm-2" name="term" id="term">
+                                            <option value="1">Học Kỳ 1</option>
+                                            <option value="2">Học Kỳ 2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto my-1">
+                                        <br>
+                                        <button type="submit" class="btn btn-primary" id="fetch_term" >Chọn</button>
+                                    </div>
+                                    <div class="col-2 ml-auto d-flex p-2" >
+                                        <button type="submit" class="btn btn-primary btn-block" id="publish">Công Bố Điểm</button>
+                                    </div>
+                                </div>
+                                <div class="table1" style="display: none;">
+                                    <form role="form" action="/{{id}}/save_student_result/{{classe.id}}/1" method="post">
+                                                {% csrf_token %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Tên Học Sinh</th>
+                                            <th>Hệ số 1</th>
+                                            <th>Hệ số 1</th>
+                                            <th>Hệ số 1</th>
+                                            <th>Hệ số 1</th>
+                                            <th>Hệ số 2</th>
+                                            <th>Cuối Kì 1</th>
+                                            <th>TB-HK1</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for s in subject_hk1_m1 %}
+                                        <tr>
+                                            <td class="col-md-3">{{s.name}}</td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.m1}}" name="{{s.stn_id}}m1_1"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.m2}}" name="{{s.stn_id}}m2_1"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.m3}}" name="{{s.stn_id}}m3_1"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.m4}}" name="{{s.stn_id}}m4_1"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.t1}}" name="{{s.stn_id}}t1_1"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.final}}" name="{{s.stn_id}}final_1"></td>
+                                            <td class="alert alert-primary">{{s.avg}}</td>
+
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary" >Submit</button>
+                                        </div>
+                                </div>
+                                    </form>
+                                </div>
+                                <div class="table2" style="display: none;">
+                                <form role="form" action="//{{id}}/save_student_result/{{classe_id}}/1" method="post">
+                                                {% csrf_token %}
+                                    <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Tên Học Sinh</th>
+                                            <th>Hệ số 1</th>
+                                            <th>Hệ số 1</th>
+                                            <th>Hệ số 1</th>
+                                            <th>Hệ số 1</th>
+                                            <th>Hệ số 2</th>
+                                            <th>Cuối Kì 2</th>
+                                            <th>TB-HK2</th>
+                                            <th>TB-Năm</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for s in subject_hk2 %}
+                                        <tr>
+                                            <td class="col-md-3">{{s.name}}</td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.m1}}" name="{{s.stn_id}}m1_2"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.m2}}" name="{{s.stn_id}}m2_2"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.m3}}" name="{{s.stn_id}}m3_2"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.m4}}" name="{{s.stn_id}}m4_2"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.t1}}" name="{{s.stn_id}}t1_2"></td>
+                                            <td class="col-md-1"><input type="number" step="0.01" class="form-control input-rounded col-md-12" value="{{s.final}}" name="{{s.stn_id}}final_2"></td>
+                                            <td class="alert alert-primary">{{s.avg}}</td>
+                                            <td class="alert alert-primary">{{s.avg_y}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary" >Submit</button>
+                                        </div>
+                                </div>
+                                </form>
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+    $("p").show();
+        $("#fetch_term").click(function(){
+            var term=$("#term").val()
+            var classe=$("#classe").val()
+            $("#term_get").text(term);
+            $("#classe_get").text(classe);
+            if(term == 1){
+             $('.table1').show();
+              $('.table2').hide();
+            }
+            else {
+            $('.table2').show();
+            $('.table1').hide();
+            }
+
+        });
+        $("#publish").click(function(){
+        var term=$("#term").val()
+        var classe=$("#classe").val()
+
+
+        $.ajax({
+            url:'{% url 'turn_publish' %}',
+            type:'POST',
+            data:{term:term,classe:classe},
+            })
+        .done(function(response){
+           if(response=="True"){
+           alert("Đã Công Bố Bảng Điểm")
+           } else
+           {
+           alert("Lỗi, Không Công Bố Được Bảng Điểm! Hãy Thử Lại!")
+
+           }
+        });
+         });
+    });
+
+</script>
+
+{% endblock custom_js %}

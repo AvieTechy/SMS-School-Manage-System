@@ -1,0 +1,114 @@
+{% extends 'Teachers/base_teacher.html' %}
+{% block page_title %}
+Bài Kiểm Tra
+{% endblock page_title %}
+{% load static %}
+
+{% block main_content %}
+    <div class="content-body">
+<div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/{{id}}/teacher_home">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Bài Kiểm Tra</a></li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% if message.tags == 'success' %}
+                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                </div>
+                                <h4 class="card-title">Bài Kiểm Tra</h4>
+
+                                <div class="container">
+                                <blockquote class="text-center">Thông Tin</blockquote>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <ul class="list-icons">
+                                                <li><h6>Tên Bài Kiểm Tra<i class="ti-angle-right"></i><b>{{exam.name}}</b></h6></li>
+                                                <li><h6>Lớp Thực Hiện<i class="ti-angle-right"></i><b> {{exam.class_id.class_name}}</b></h6></li>
+                                                <li><h6>Hệ Số<i class="ti-angle-right"></i> <b>{{exam.mul}}</b></h6></li>
+                                                <li><h6>Ngày Thực Hiện<i class="ti-angle-right"></i><b>{%if exam.form == "TN" %}Trắc Nghiệm {%else%} Tự Luận {%endif%}</b></h6></li>
+                                                <li><h6>Trạng Thái<i class="ti-angle-right"></i><b>{%if exam.is_active == True %} Chưa Hoàn Thành {%else%} Đã Hoàn Thành {%endif%}</b></h6></li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="col-6">
+                                            <ul class="list-icons">
+                                                <li><h6>Ngày Thực Hiện<i class="ti-angle-right"></i><b>{{exam.date}}</b></h6></li>
+                                                <li><h6>Thời Gian Bắt Đầu<i class="ti-angle-right"></i><b>{{exam.start}}</b></h6></li>
+                                                <li><h6>Thời Gian Kết Thúc<i class="ti-angle-right"></i><b>{{exam.end}}</b></h6></li>
+                                                <li><h6>Link Đề<i class="ti-angle-right"></i><b><a href="{{exam.file}}" target="_blank">{{exam.name}}</a></b></h6></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <iframe src="{{exam.file}}" width="100%" height="500px">file đề</iframe>
+                                    <blockquote class="text-center">Đáp Án</blockquote>
+
+                                    <div class="row">
+                                        {% for ans in list_exam %}
+                                        <div class="col-2">
+                                            <h5>{{ans.stt}}.<b class="text-danger">{{ans.ans}}</b></h5>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <blockquote class="text-center">Kết Quả</blockquote>
+                                     <div class="table-responsive">
+                                    <table class="table table-striped table-bordered zero-configuration header-border table-hover verticle-middle">
+                                        <thead>
+                                        <tr>
+                                          <th>Tên Học Sinh</th>
+                                          <th>Thời Gian Làm</th>
+                                          <th>Số Lần Cảnh Cáo</th>
+                                          <th>Điểm</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for stn in stn_exam %}
+
+                                        <tr>
+                                            <td>{{stn.student.admin.first_name}} {{stn.student.admin.last_name}}</td>
+                                            <td>{{stn.time_finish}}</td>
+                                            <td>{{stn.is_active}}</td>
+                                            <td>{{stn.sum}}</td>
+                                        </tr>
+                                      {% endfor %}
+                                      </tbody>
+                                        <tfoot>
+                                            <tr>
+                                          <th>Tên Học Sinh</th>
+                                          <th>Thời Gian Làm</th>
+                                          <th>Số Lần Cảnh Cáo</th>
+                                          <th>Điểm</th>
+                                          </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+            </div>
+    </div>
+
+{% endblock main_content %}
+{% block custom_js %}
+    <script src="{% static 'SMS/plugins/tables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/tables/js/datatable/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/tables/js/datatable-init/datatable-basic.min.js' %}"></script>
+
+{% endblock custom_js %}

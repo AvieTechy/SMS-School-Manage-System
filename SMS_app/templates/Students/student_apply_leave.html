@@ -1,0 +1,110 @@
+{% extends 'Students/base_student.html' %}
+{% block page_title %}
+Hồ Sơ Xin Vắng Học Sinh
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content-body">
+        <div class="row page-titles mx-0">
+            <div class="col p-md-0">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="/student_home">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="">Xin Vắng</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"> <br> Hồ Sơ Xin Vắng</h3>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% if message.tags == 'success' %}
+                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <form action="{% url 'student_apply_leave_save' %}" method="post">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label>Ngày Vắng</label>
+                                                           {% csrf_token %}
+                                                          <input type="date" name="leave_date" class="form-control" placeholder="Ngày Vắng">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Lí Do</label>
+                                                        <textarea class="form-control" rows="6" name="leave_msg"></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-footer">
+                                                    <button type="submit" class="btn btn-primary btn-block" id="fetch_student">Nộp Đơn</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4>Lịch Sử Vắng</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Ngày Vắng</th>
+                                        <th>Lí Do</th>
+                                        <th>Tình trạng</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for row in leave_data %}
+                                    <tr>
+                                        <td>{{ row.id }}</td>
+                                        <td>{{ row.leave_date }}</td>
+                                        <td>{{ row.leave_message }}</td>
+                                        <td>
+                                            {% if row.leave_status == 1 %}
+                                            <span class="alert alert-success">Chấp nhận</span>
+                                            {% elif row.leave_status == 2 %}
+                                            <span class="alert alert-danger">Từ Chối</span>
+                                            {% else %}
+                                            <span class="alert alert-info">Đang xử lí</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}

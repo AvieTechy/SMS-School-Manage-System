@@ -1,0 +1,252 @@
+{% extends 'Admin/base_admin.html' %}
+{% block page_title %}
+Admin Home
+{% endblock page_title %}
+{% load static%}
+{% block custom_css %}
+<!-- Pignose Calender -->
+    <link href="{% static 'SMS/plugins/pg-calendar/css/pignose.calendar.min.css' %}" rel="stylesheet">
+    <!-- Chartist -->
+    <link rel="stylesheet" href="{% static 'SMS/plugins/chartist/css/chartist.min.css'%}">
+    <link rel="stylesheet" href="{% static 'SMS/plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css'%}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+
+{% endblock custom_css %}
+
+{% block main_content %}
+
+    <!-- Main content -->
+    <!-- Main content -->
+    <div class="content-body">
+        <div class="container-fluid mt-3">
+            <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card gradient-1">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">Tổng Số Học Sinh</h3>
+                                <div class="d-inline-block">
+                                    <h2 class="text-white">{{student_cnt}}</h2>
+                                    <a href="/{{id}}/manage_student" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                                </div>
+                                <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card gradient-2">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">Tổng Số Giáo Viên</h3>
+                                <div class="d-inline-block">
+                                    <h2 class="text-white">{{teacher_cnt}}</h2>
+                                     <a href="/{{id}}/manage_teacher_in_session" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                                </div>
+                                <span class="float-right display-5 opacity-5"><i class="fas fa-chalkboard-teacher"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card gradient-3">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">Tổng Số Lớp Học</h3>
+                                <div class="d-inline-block">
+                                    <h2 class="text-white">{{class_cnt}}</h2>
+                                    <a href="/{{id}}/manage_class" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                                </div>
+                                <span class="float-right display-5 opacity-5"><i class="fa fa-book-open"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card gradient-4">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">Số Học Sinh 10:11:12</h3>
+                                <div class="d-inline-block">
+                                    <h2 class="text-white">{{cnt_10}}:{{cnt_11}}:{{cnt_12}}</h2>
+                                    <a href="/{{id}}/manage_class" class="small-box-footer"><p class="text-white mb-0">Thêm Thông Tin <i class="fa fa-angle-double-right"></i></p></a>
+                                </div>
+                                <span class="float-right display-5 opacity-5"><i class="fa fa-book"></i></span>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+             <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Biểu Đồ Tỉ Lệ Học Sinh Nam & Nữ</h4>
+                                   <canvas id="pieChart"  class="flot-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Tổng số học sinh trên mỗi lớp học sinh khối 10</h4>
+                                   <canvas id="donutChart"  class="flot-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+             </div>
+            <div class="row">
+              <div class="col-lg-6">
+                 <div class="card card-info">
+                  <div class="card-header">
+                    <h3 class="card-title">Tổng số học sinh trên mỗi lớp học sinh khối 11</h3>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="pieChart3" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+              <div class="col-lg-6">
+                 <div class="card card-warning">
+                  <div class="card-header">
+                    <h3 class="card-title">Tổng số học sinh trên mỗi lớp học sinh khối 12</h3>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="pieChart4" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+          </div>
+        </div>
+    </div>
+    <!-- /.content -->
+{% endblock main_content %}
+
+{% block custom_js %}
+
+     <!-- Chartjs -->
+    <script src="{% static 'SMS/plugins/chart.js/Chart.bundle.min.js' %}"></script>
+    <!-- Circle progress -->
+    <script src="{% static 'SMS/plugins/circle-progress/circle-progress.min.js' %}"></script>
+    <!-- Datamap -->
+    <script src="{% static 'SMS/plugins/d3v3/index.js' %}"></script>
+    <script src="{% static 'SMS/plugins/topojson/topojson.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/datamaps/datamaps.world.min.js' %}"></script>
+    <!-- Morrisjs -->
+    <script src="{% static 'SMS/plugins/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/morris/morris.min.js' %}"></script>
+    <!-- Pignose Calender -->
+    <script src="{% static 'SMS/plugins/moment/moment.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/pg-calendar/js/pignose.calendar.min.js' %}"></script>
+    <!-- ChartistJS -->
+    <script src="{% static 'SMS/plugins/chartist/js/chartist.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js' %}"></script>
+    <script src="{% static 'SMS/js/dashboard/dashboard-1.js' %}"></script>
+
+<script>
+    $(document).ready(function(){
+
+            var pieData        = {
+                  labels: [
+                      'Nam',
+                      'Nữ'
+                  ],
+                  datasets: [
+                    {
+                      data: [{{ student_girl }},{{ student_boy }}],
+                      backgroundColor : ['#9933FF', '#D06B9A'],
+                    }
+                  ]
+             };
+             var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+            var pieOptions     = {
+              maintainAspectRatio : false,
+              responsive : true,
+            }
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            var pieChart = new Chart(pieChartCanvas, {
+              type: 'pie',
+              data: pieData,
+              options: pieOptions
+            });
+
+             //Second Chart for Total Student in Each Class 10
+                var student_count_list={{ student_count_list }};
+                var class_name_list_10={{ class_name_list_10|safe }};
+                var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+                var donutData        = {
+                  labels:class_name_list_10,
+                  datasets: [
+                    {
+                      data: student_count_list,
+                      backgroundColor : ['#f56954', '#4682B4', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de',''],
+                    }
+                  ]
+                }
+                var donutOptions     = {
+                  maintainAspectRatio : false,
+                  responsive : true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                var donutChart = new Chart(donutChartCanvas, {
+                  type: 'doughnut',
+                  data: donutData,
+                  options: donutOptions
+                });
+
+            //Third Chart for Total Student in Each Class 11
+                var student_count_list11 ={{ student_count_list11 }};
+                var class_name_list_11={{ class_name_list_11|safe }};
+                var donutChartCanvas1 = $('#pieChart3').get(0).getContext('2d')
+                var donutData1        = {
+                  labels:class_name_list_11,
+                  datasets: [
+                    {
+                      data: student_count_list11,
+                      backgroundColor : ['#f56954', '#4682B4', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de',''],
+                    }
+                  ]
+                }
+                var donutOptions1     = {
+                  maintainAspectRatio : false,
+                  responsive : true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                var donutChart1 = new Chart(donutChartCanvas1, {
+                  type: 'doughnut',
+                  data: donutData1,
+                  options: donutOptions1
+                });
+
+             //Fourth Chart for Total Student in Each Class 12
+                var student_count_list12 ={{ student_count_list12 }};
+                var class_name_list_12={{ class_name_list_12|safe }};
+                var donutChartCanvas2 = $('#pieChart4').get(0).getContext('2d')
+                var donutData2        = {
+                  labels:class_name_list_12,
+                  datasets: [
+                    {
+                      data: student_count_list12,
+                      backgroundColor : ['#f56954', '#4682B4', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de',''],
+                    }
+                  ]
+                }
+                var donutOptions2     = {
+                  maintainAspectRatio : false,
+                  responsive : true,
+                }
+                //Create pie or douhnut chart
+                // You can switch between pie and douhnut using the method below.
+                var donutChart2 = new Chart(donutChartCanvas2, {
+                  type: 'doughnut',
+                  data: donutData2,
+                  options: donutOptions2
+                });
+
+     });
+</script>
+     <script src="{% static 'SMS/plugins/flot/js/jquery.flot.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.spline.js' %}"></script>
+    <script src="{% static 'SMS/plugins/flot/js/jquery.flot.init.js' %}"></script>
+    <script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+{% endblock custom_js %}

@@ -1,0 +1,49 @@
+{% extends 'Students/base_student.html' %}
+{% block page_title %}
+Thông báo của học sinh
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content-body">
+        <div class="row page-titles mx-0">
+            <div class="col p-md-0">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="/student_home">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="">Thông Báo</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h4>Tất Cả Tin</h4>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                               <th>Thông báo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for notification in notifications %}
+                                              <tr>
+                                                <td>{{ notification.message }}</td>
+                                              </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+
+

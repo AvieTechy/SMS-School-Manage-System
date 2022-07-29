@@ -1,0 +1,170 @@
+{% extends 'Admin/base_admin.html' %}
+{% block page_title %}
+Thêm Học Sinh
+{% endblock page_title %}
+{% block main_content %}
+        <div class="row page-titles mx-0">
+            <div class="col p-md-0">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="/admin_home">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="">Thêm Học Sinh</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"> <br> Thêm Học Sinh</h3>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% if message.tags == 'success' %}
+                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <form role="form" action="/{{id}}/add_student_save" method="post">
+                                          {% csrf_token %}
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label for="id_email">Email: </label>
+                                                    <input type="text" class="form-control" id="id_email" name="email" >
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                  <label for="id_username">Username </label>
+                                                    <input type="text" class="form-control" id="id_username" name="username">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                  <label for="password">Mật khẩu: </label>
+                                                    <input type="password" class="form-control" id="password" name="password">
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label for="first_name">Họ </label>
+                                                    <input type="text" class="form-control" id="first_name" name="first_name" >
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                  <label for="last_name">Tên </label>
+                                                    <input type="text" class="form-control" id="last_name" name="last_name">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                  <label for="gender">Giới tính </label>
+                                                    <select class="form-control" id="gender" name="gender">
+                                                        <option value="Nữ">Nữ</option>
+                                                        <option value="Nam">Nam</option>
+                                                </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="address">Địa chỉ </label>
+                                                    <input type="text" class="form-control" id="address" name="address" >
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                  <label for="classe">Lớp </label>
+                                                    <select class="form-control" id="classe" name="classe">
+                                                    {% for classe in classes %}
+                                                      <option value="{{classe.id}}">{{classe.class_name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.card-body -->
+
+                                        <div class="card-footer">
+                                          <button type="submit" class="btn btn-primary btn-block">Thêm Học Sinh</button>
+                                        </div>
+                                      </form>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+        $("#id_email").keyup(function(){
+            var email=$(this).val();
+
+           if(email!=""){
+                $.ajax({
+                    url:'{% url 'check_email_exist' %}',
+                    type:'POST',
+                    data:{email:email}
+                })
+                .done(function(response){
+                    console.log(response);
+                    if(response=="True"){
+                        $(".email_error").remove();
+                        $("<span class='email_error' style='padding: 5px;color: red;font-weight: bold;'>Email Không Hợp Lệ </span>").insertAfter("#id_email");
+                    }
+                    else{
+                        $(".email_error").remove();
+                        $("<span class='email_error' style='padding: 5px;color: green;font-weight: bold;'>Email Hợp Lệ</span>").insertAfter("#id_email");
+                    }
+                })
+                .fail(function(){
+                    console.log("failed");
+                })
+            }
+            else{
+              $(".email_error").remove();
+            }
+
+        });
+
+        $("#id_username").keyup(function(){
+            var username=$(this).val();
+
+            if(username!=""){
+                $.ajax({
+                    url:'{% url 'check_username_exist' %}',
+                    type:'POST',
+                    data:{username:username}
+                })
+                .done(function(response){
+                    console.log(response);
+                    if(response=="True"){
+                        $(".username_error").remove();
+                        $("<span class='username_error' style='padding: 5px;color: red;font-weight: bold;'>Username Không Hợp lệ</span>").insertAfter("#id_username");
+                    }
+                    else{
+                        $(".username_error").remove();
+                        $("<span class='username_error' style='padding: 5px;color: green;font-weight: bold;'>Username Hợp Lệ</span>").insertAfter("#id_username");
+                    }
+                })
+                .fail(function(){
+                    console.log("failed");
+                })
+            }
+            else{
+                $(".username_error").remove();
+            }
+
+        });
+
+    });
+</script>
+{% endblock custom_js %}

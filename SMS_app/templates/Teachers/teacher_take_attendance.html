@@ -1,0 +1,166 @@
+{% extends 'Teachers/base_teacher.html' %}
+{% block page_title %}
+Điểm Danh
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content-body">
+        <div class="row page-titles mx-0">
+            <div class="col p-md-0">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="/{{id}}/teacher_home">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="">Điểm Danh</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"> <br> Điểm Danh</h3>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% if message.tags == 'success' %}
+                                <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div id="student_data" class="card-footer"><div class="alert alert-info" >Chưa tìm thấy dữ liệu nào! Hãy chọn lớp và ngày cần điểm danh</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label>Môn học</label>
+                                                    <select class="form-control" name="classe" id="classe">
+                                                        {% for class in class_list %}
+                                                          <option value="{{ class.id }}">{{ class.class_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                  </div>
+                                                <div class="card-footer">
+                                                  <button type="button" class="btn btn-primary btn-block" id="fetch_student">Tìm Học Sinh</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+<!--                            <div class="row justify-content-center">-->
+<!--                                <div class="col-lg-12">-->
+<!--                                    <div class="card">-->
+<!--                                        <div class="card-body">-->
+<!--                                           <div class="form-group">-->
+<!--                                            <label>Môn học</label>-->
+<!--                                            <select class="form-control" name="classe" id="classe">-->
+<!--                                                {% for class in class_list %}-->
+<!--                                                  <option value="{{ class.id }}">{{ class.class_name }}</option>-->
+<!--                                                {% endfor %}-->
+<!--                                            </select>-->
+<!--                                          </div>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash; /.card-body &ndash;&gt;-->
+
+<!--                                        <div class="card-footer">-->
+<!--                                          <button type="button" class="btn btn-primary btn-block" id="fetch_student">Tìm Học Sinh</button>-->
+<!--                                        </div>-->
+<!--                                        <div id="student_data" class="card-footer">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+        $("#fetch_student").click(function(){
+            var classe=$("#classe").val()
+
+            $.ajax({
+                url:'{% url 'get_students' %}',
+                type:'POST',
+                data:{classe:classe},
+            })
+            .done(function(response){
+                var json_data=JSON.parse(response);
+                console.log(json_data)
+                var div_data="<div class='form-group'><label>Ngày Điểm Danh: </label><input type='date' name='attendance_date' id='attendance_date' class='form-control'></div><div class='form-group'><div class='row'>";
+                var stt=0
+                for(key in json_data)
+                {
+                    stt = stt+1
+                    div_data+="<div class='col-lg-4'><div class='form-check'><input type='checkbox' checked='checked' name='student_data[]' value='"+json_data[key]['id']+"'><label class='form-check-label'>"+stt+": "+json_data[key]['name']+"</label></div></div>";
+                }
+                div_data+="</div></div>";
+                div_data+="<div class='form-group'>";
+                div_data+="<button id='save_attendance' class='btn btn-success btn-block' type='button'>Lưu Điểm Danh</button>";
+                div_data+="</div>";
+
+                $("#student_data").html(div_data);
+
+            })
+            .fail(function(){
+                alert("Lỗi! Không Tìm được Học Sinh")
+            })
+
+            $(document).on("click","#save_attendance",function(){
+
+                $(this).attr("disabled","disabled")
+                $(this).text("Saving Attendance Data...")
+                var student_data=$("input[name='student_data[]']").map(function(){
+                        if($(this).is(":checked")){
+                            return {"id":$(this).val(),"status":1};
+                        }
+                        else{
+                            return {"id":$(this).val(),"status":0};
+                        }
+                 }).get()
+                var attendance_date=$("#attendance_date").val();
+                var class_id=$("#classe").val();
+                console.log(student_data)
+                student_data=JSON.stringify(student_data)
+
+                $.ajax({
+                        url:'{% url 'save_attendance_data' %}',
+                        type:'POST',
+                        data:{student_ids:student_data,attendance_date:attendance_date,class_id:class_id},
+                    })
+                    .done(function(response){
+
+                        if(response=="OK"){
+                            alert("Đã lưu điểm danh")
+                        }
+                        else{
+                            alert("Lỗi! Không lưu được dữ liệu")
+                        }
+                        location.reload()
+                    })
+                    .fail(function(){
+                        alert("Lỗi! Không Lưu được Học Sinh")
+                    })
+            })
+        })
+    })
+</script>
+{% endblock custom_js %}

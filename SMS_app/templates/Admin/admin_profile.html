@@ -1,0 +1,119 @@
+{% extends 'Admin/base_admin.html' %}
+{% block page_title %}
+Chỉnh Sửa Hồ Sơ
+{% endblock page_title %}
+{% load static%}
+{% block custom_css %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock custom_css %}
+{% block main_content %}
+    <div class="content-body">
+
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin_home/{{id}}">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="">Hồ Sơ</a></li>
+                    </ol>
+                </div>
+            </div>
+            <!-- row -->
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-4 col-xl-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media align-items-center mb-4">
+                                    <img class="mr-3" src="{% static 'SMS/images/user/favalogo.png' %}" width="80" height="80" alt="">
+                                    <div class="media-body">
+                                        <h3 class="mb-0">{{ user.username }}</h3>
+                                        <p class="text-muted mb-0">@admin</p>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-5">
+                                    <div class="col">
+                                        <div class="card card-profile text-center">
+                                            <span class="mb-1 text-primary"><i class="fa fa-users"></i></span>
+                                            <h3 class="mb-0">{{ student_count }}</h3>
+                                            <p class="text-muted px-4">Học Sinh</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card card-profile text-center">
+                                            <span class="mb-1 text-warning"><i class="fas fa-chalkboard-teacher"></i></span>
+                                            <h3 class="mb-0">{{ teacher_count }}</h3>
+                                            <p class="text-muted">Giáo Viên</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <a href="/admin_home/{{id}}"><button class="btn btn-danger px-5">Thêm Thông Tin</button></a>
+                                    </div>
+                                </div>
+
+                                <h4>About Me</h4>
+                                <p class="text-muted">Admin quản lí trường THPT Chuyên Vị Thanh</p>
+                                <ul class="card-profile__info">
+                                    <li class="mb-1"><strong class="text-dark mr-4">Mobile</strong> <span>012-345-6789</span></li>
+                                    <li><strong class="text-dark mr-4">Email</strong> <span>CVT@gmail.com</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-xl-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title text-white">Chỉnh Sửa Hồ Sơ</h3>
+                                <form role="form" action="{{id}}/admin_profile_save" method="post">
+                                  {% csrf_token %}
+                                <div class="card-body">
+                                  <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text" class="form-control" name="username" value="{{ user.username }}" disabled="disabled">
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" name="email" value="{{ user.email }}" disabled="disabled">
+                                  </div>
+                                   <div class="form-group">
+                                    <label>Họ</label>
+                                    <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}">
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Tên</label>
+                                    <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}">
+                                  </div>
+                                   <div class="form-group">
+                                    <label>Đổi Mật Khẩu?</label>
+                                    <input type="text" class="form-control" name="password" placeholder=" Chỉ Điền Khi Bạn Muốn Đổi Mật Khẩu">
+                                  </div>
+                                   <div class="form-group">
+                                      {% if messages %}
+                                        {% for message in messages %}
+                                        {% if message.tags == 'error' %}
+                                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                        {% endif %}
+                                        {% if message.tags == 'success' %}
+                                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                        {% endif %}
+                                        {% endfor %}
+                                      {% endif %}
+                                    </div>
+
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                  <button type="submit" class="btn btn-primary btn-block">Lưu Hồ Sơ</button>
+                                </div>
+                              </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #/ container -->
+        </div>
+{% endblock main_content %}
+

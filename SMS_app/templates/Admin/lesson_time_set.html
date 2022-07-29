@@ -1,0 +1,1429 @@
+{% extends 'Admin/base_admin.html' %}
+{% block page_title %}
+Quản lí thời khoá biểu
+{% endblock page_title %}
+{% load static %}
+ {% block custom_css %}
+<link rel="stylesheet" href="{% static 'SMS/style.css' %}">
+
+{% endblock custom_css %}
+{% block main_content %}
+
+<!-- Main content -->
+
+<div class="content-body">
+        <div class="row page-titles mx-0">
+            <div class="col p-md-0">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active"><a href="/{{id}}/admin_home">Home</a></li>
+                    <li class="breadcrumb-item active"><a href="">Thời Khoá Biểu</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Thời Khoá Biểu</h4>
+
+                        <div class="custom-tab-1">
+                                    <ul class="nav nav-tabs mb-3">
+                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home1">Sắp TKB</a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile1">Cài Đặt</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="home1" role="tabpanel">
+                                            <div class="p-t-15">
+                                                <div class="card-body">
+                                                  <div class="form-group">
+                                                      {% if messages %}
+                                                      {% for message in messages %}
+                                                      {% if message.tags == 'error' %}
+                                                      <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                                      {% endif %}
+                                                      {% if message.tags == 'success' %}
+                                                      <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                                      {% endif %}
+                                                      {% endfor %}
+                                                      {% endif %}
+                                                  </div>
+                                                    <h4 class="card-title">Thiết Lập Thời Khoá Biểu</h4>
+                                                       <div class="form-row align-items-center">
+                                                          <div class="col-auto my-1">
+                                                            <label class="mr-sm-2" for="classe">Lớp Học</label>
+                                                               <select class="custom-select mr-sm-2" name="classe" id="classe">
+                                                                  {% for class in class_list %}
+                                                                    <option value="{{ class.id }}">{{ class.class_name }}</option>
+                                                                  {% endfor %}
+                                                               </select>
+                                                          </div>
+                                                          <div class="col-auto my-1">
+                                                           <br>
+                                                            <button type="submit" class="btn btn-primary" id="fetch_class" >Submit</button>
+                                                          </div>
+                                                       </div>
+                                              <div class="table" style="display: none;">
+                                                     <form role="form" action="/{{id}}/timetable_division_save" method="post">
+                                                                    {% csrf_token %}
+                                                         <div class="col-2 ml-auto d-flex p-2" >
+                                                            <button type="submit" class="btn btn-primary btn-block">Cài Đặt</button>
+                                                         </div>
+                                                         <input type="hidden" name="class_id" class="form-control" id="class_id">
+                                                         <div class="card-footer col-2 ml-auto d-flex p-2" >
+                                                         </div>
+                                                  <div class="row justify-content-center ">
+                                                    <h3>Buổi Sáng</h3>
+                                                            <div class="timetable">
+                                                              <div class="week-names">
+                                                                <div style="background-color:#E5CFE5;"><b>Thứ hai</b></div>
+                                                                <div style="background-color:#E5CFE5;"><b>Thứ ba</b></div>
+                                                                <div style="background-color:#E5CFE5;"><b>Thứ tư</b></div>
+                                                                <div style="background-color:#E5CFE5;"><b>Thứ năm</b></div>
+                                                                <div style="background-color:#E5CFE5;"><b>Thứ sáu</b></div>
+                                                                <div style="background-color:#E5CFE5;"><b>Thứ bảy</b></div>
+                                                                <div class="weekend" style="background-color:#E5CFE5;"><b>Chủ Nhật</b></div>
+                                                              </div>
+                                                              <div class="time-interval">
+                                                                {% for l in lts_mor %}
+                                                                <div style="background-color:#E5CFE5; text-align: center;"><b>{{l.time_start}} - {{l.time_end}}</b></div>
+                                                                {% endfor %}
+                                                              </div>
+                                                              <div class="content">
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l1_2"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l1_2">
+                                                                        <option selected id="l1_2"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l1_3"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l1_3">
+                                                                        <option selected id="l1_3"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l1_4"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l1_4">
+                                                                        <option selected id="l1_4"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l1_5"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l1_5">
+                                                                        <option selected id="l1_5" >Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l1_6"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l1_6">
+                                                                        <option selected id="l1_6">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l1_7"></label>
+                                                                      <select class="custom-select mr-sm-2"name="l1_7">
+                                                                        <option selected  id="l1_7" >Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div class="weekend" style="background-color:#FDFDFD;"></div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l2_2"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l2_2">
+                                                                        <option selected id="l2_2" ></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l2_3"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l2_3">
+                                                                        <option selected id="l2_3"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l2_4"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l2_4">
+                                                                        <option selected id="l2_4" ></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                  <div style="background-color:#F4EEFF;">
+                                                                      <label class="mr-sm-2" for="l2_5"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l2_5">
+                                                                        <option selected id="l2_5">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l2_6"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l2_6">
+                                                                        <option selected id="l2_6"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l2_7"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l2_7">
+                                                                        <option selected id="l2_7">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div class="weekend" style="background-color:#F4EEFF;"></div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l3_2"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l3_2">
+                                                                        <option selected id="l3_2"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l3_3"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l3_3">
+                                                                        <option selected id="l3_3"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l3_4"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l3_4">
+                                                                        <option selected id="l3_4"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l3_5"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l3_5">
+                                                                        <option selected id="l3_5">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l3_6"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l3_6">
+                                                                        <option selected id="l3_6">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l3_7"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l3_7">
+                                                                        <option selected id="l3_7" ></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div class="weekend" style="background-color:#FDFDFD;"></div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l4_2"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l4_2">
+                                                                        <option selected id="l4_2">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l4_3"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l4_3">
+                                                                        <option selected id="l4_3">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l4_4"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l4_4">
+                                                                        <option selected id="l4_4">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l4_5"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l4_5">
+                                                                        <option selected  id="l4_5" >Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l4_6"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l4_6">
+                                                                        <option selected id="l4_6">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F4EEFF;">
+                                                                    <label class="mr-sm-2" for="l4_7"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l4_7">
+                                                                        <option selected id="l4_7">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div class="weekend" style="background-color:#F4EEFF;"></div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l5_2"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l5_2">
+                                                                        <option selected id="l5_2">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l5_3"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l5_3">
+                                                                        <option selected id="l5_3">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l5_4"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l5_4">
+                                                                        <option selected id="l5_4" >Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l5_5"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l5_5">
+                                                                        <option selected id="l5_5">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l5_6"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l5_6">
+                                                                        <option selected id="l5_6">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l5_7"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l5_7">
+                                                                        <option selected id="l5_7">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div class="weekend" style="background-color:#FDFDFD;"></div>
+
+                                                              </div>
+                                                            </div>
+                                                        <h3>Buổi Chiều</h3>
+                                                          <div class="timetable">
+                                                              <div class="week-names">
+                                                                <div style="background-color:#CADEFC;"><b>Thứ hai</b></div>
+                                                                <div style="background-color:#CADEFC;"><b>Thứ ba</b></div>
+                                                                <div style="background-color:#CADEFC;"><b>Thứ tư</b></div>
+                                                                <div style="background-color:#CADEFC;"><b>Thứ năm</b></div>
+                                                                <div style="background-color:#CADEFC;"><b>Thứ sáu</b></div>
+                                                                <div style="background-color:#CADEFC;"><b>Thứ bảy</b></div>
+                                                                <div class="weekend" style="background-color:#CADEFC;"><b>Chủ Nhật</b></div>
+                                                              </div>
+                                                              <div class="time-interval">
+                                                                {% for l in lts_aft %}
+                                                                <div style="background-color:#CADEFC;"><b>{{l.time_start}} - {{l.time_end}}</b></div>
+                                                                {% endfor %}
+                                                              </div>
+                                                              <div class="content">
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l6_2"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l6_2">
+                                                                        <option selected id="l6_2">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l6_3"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l6_3">
+                                                                        <option selected id="l6_3" >Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l6_4"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l6_4">
+                                                                        <option selected  id="l6_4" ></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l6_5"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l6_5">
+                                                                        <option selected id="l6_5"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l6_6"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l6_6">
+                                                                        <option selected  id="l6_6">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l6_7"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l6_7">
+                                                                        <option selected id="l6_7" ></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div class="weekend" style="background-color:#FDFDFD;"></div>
+                                                                <div style="background-color:#F3F8FF;">
+                                                                    <label class="mr-sm-2" for="l7_2"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l7_2">
+                                                                        <option selected id="l7_2">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F3F8FF;">
+                                                                    <label class="mr-sm-2" for="l7_3"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l7_3">
+                                                                        <option selected id="l7_3">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F3F8FF;">
+                                                                    <label class="mr-sm-2" for="l7_4"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l7_4">
+                                                                        <option selected id="l7_4">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                  <div style="background-color:#F3F8FF;">
+                                                                      <label class="mr-sm-2" for="l7_5"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l7_5">
+                                                                        <option selected id="l7_5">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div style="background-color:#F3F8FF;">
+                                                                    <label class="mr-sm-2" for="l7_6"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l7_6">
+                                                                        <option selected id="l7_6">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#F3F8FF;">
+                                                                    <label class="mr-sm-2" for="l7_7"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l7_7">
+                                                                        <option selected id="l7_7">Choose...</option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div class="weekend" style="background-color:#F3F8FF;"></div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l8_2"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l8_2">
+                                                                        <option selected id="l8_2"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l8_3"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l8_3">
+                                                                        <option selected id="l8_3"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                  <div style="background-color:#FDFDFD;">
+                                                                      <label class="mr-sm-2" for="l8_4"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l8_4">
+                                                                        <option selected id="l8_4"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                  </div>
+                                                                <div style="background-color:#FDFDFD;" >
+                                                                    <label class="mr-sm-2" for="l8_5"></label>
+                                                                      <select class="custom-select mr-sm-2"  name="l8_5">
+                                                                        <option selected id="l8_5"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l8_6"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l8_6">
+                                                                        <option selected id="l8_6"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div style="background-color:#FDFDFD;">
+                                                                    <label class="mr-sm-2" for="l8_7"></label>
+                                                                      <select class="custom-select mr-sm-2" name="l8_7">
+                                                                        <option selected  id="l8_7"></option>
+                                                                        <option value="Toán">Toán</option>
+                                                                        <option value="Vật Lí">Vật Lí</option>
+                                                                        <option value="Hoá Học">Hoá Học</option>
+                                                                          <option value="Sinh Học">Sinh Học</option>
+                                                                        <option value="Lịch Sử">Lịch Sử</option>
+                                                                        <option value="Địa Lí">Địa Lí</option>
+                                                                          <option value="GDCD">GDCD</option>
+                                                                        <option value="Ngữ Văn">Ngữ Văn</option>
+                                                                        <option value="Tin Học">Tin Học</option>
+                                                                          <option value="Công Nghệ">Công Nghệ</option>
+                                                                        <option value="Thể Dục">Thể Dục</option>
+                                                                        <option value="GDQP">GDQP</option>
+                                                                          <option value="Ngoại Ngữ">Ngoại Ngữ</option>
+                                                                        <option value="Chuyên Đề">Chuyên Đề</option>
+                                                                      </select>
+                                                                </div>
+                                                                <div class="weekend" style="background-color:#FDFDFD;"></div>
+                                                              </div>
+                                                          </div>
+                                                  </div>
+                                                </form>
+                                              </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="profile1">
+                                            <div class="p-t-15">
+                                                <div class="card-body">
+                                                   <div class="form-group">
+                                                      {% if messages %}
+                                                      {% for message in messages %}
+                                                      {% if message.tags == 'error' %}
+                                                      <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                                                      {% endif %}
+                                                      {% if message.tags == 'success' %}
+                                                      <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                                                      {% endif %}
+                                                      {% endfor %}
+                                                      {% endif %}
+                                                  </div>
+                                                <h4 class="card-title">Cài Đặt Thời Lượng Các Tiết Học</h4>
+                                                    <form role="form" action="/{{id}}/lession_time_set_save" method="post">
+                                                                    {% csrf_token %}
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="card">
+                                                                    <div class="card-body">
+                                                                        <h4>Buổi Sáng</h4>
+                                                                        <div class="row">
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 1: <b>Bắt Đầu</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt1.time_start}} name="mt1_s"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 1: <b>Kết Thúc</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt1.time_end}} name="mt1_e"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 2: <b>Bắt Đầu</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt2.time_start}} name="mt2_s"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 2: <b>Kết Thúc</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt2.time_end}} name="mt2_e"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 3: <b>Bắt Đầu</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt3.time_start}} name="mt3_s"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 3: <b>Kết Thúc</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt3.time_end}} name="mt3_e"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 4: <b>Bắt Đầu</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt4.time_start}} name="mt4_s"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 4: <b>Kết Thúc</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt4.time_end}} name="mt4_e"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 5: <b>Bắt Đầu</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt5.time_start}} name="mt5_s"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 5: <b>Kết Thúc</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{mt5.time_end}} name="mt5_e"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="card">
+                                                                    <div class="card-body">
+                                                                        <h4>Buổi Chiều</h4>
+                                                                        <div class="row">
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 1: <b>Bắt Đầu</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{at1.time_start}} name="at1_s"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 1: <b>Kết Thúc</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{at1.time_end}} name="at1_e"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 2: <b>Bắt Đầu</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{at2.time_start}} name="at2_s"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 2: <b>Kết Thúc</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{at2.time_end}} name="at2_e"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 3: <b>Bắt Đầu</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{at3.time_start}} name="at3_s"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label class="m-t-40">Tiết 3: <b>Kết Thúc</b></label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                                                                    <input type="text" class="form-control" value={{at3.time_end}} name="at3_e"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                         <div class="card-footer">
+                                                                        <button type="submit" class="btn btn-primary btn-block">Hoàn Tất</button>
+                                                                        </div>
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+</div>
+
+{% endblock main_content %}
+{% block custom_js %}
+<script>
+    $(document).ready(function(){
+    $("p").show();
+
+        $("#fetch_class").click(function(){
+            var classe=$("#classe").val()
+            $("#class_id").val(classe);
+            $.ajax({
+                url:'{% url 'get_class_divide' %}',
+                type:'POST',
+                data:{classe:classe},
+            })
+            .done(function(response){
+                var json_data=JSON.parse(response);
+                console.log(json_data)
+
+                 for(key in json_data)
+                {
+
+                  if(json_data[key]['name'] =="l1_2"){
+                    $("#l1_2").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l1_3"){
+                    $("#l1_3").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l1_4"){
+                    $("#l1_4").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l1_5"){
+                    $("#l1_5").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l1_6"){
+                    $("#l1_6").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l1_7"){
+                    $("#l1_7").text(json_data[key]['subject']);
+                    }
+
+                  if(json_data[key]['name'] =="l2_2"){
+                    $("#l2_2").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l2_3"){
+                    $("#l2_3").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l2_4"){
+                    $("#l2_4").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l2_5"){
+                    $("#l2_5").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l2_6"){
+                    $("#l2_6").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l2_7"){
+                    $("#l2_7").text(json_data[key]['subject']);
+                    }
+
+                  if(json_data[key]['name'] =="l3_2"){
+                    $("#l3_2").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l3_3"){
+                    $("#l3_3").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l3_4"){
+                    $("#l3_4").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l3_5"){
+                    $("#l3_5").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l3_6"){
+                    $("#l3_6").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l3_7"){
+                    $("#l3_7").text(json_data[key]['subject']);
+                    }
+
+                  if(json_data[key]['name'] =="l4_2"){
+                    $("#l4_2").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l4_3"){
+                    $("#l4_3").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l4_4"){
+                    $("#l4_4").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l4_5"){
+                    $("#l4_5").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l4_6"){
+                    $("#l4_6").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l4_7"){
+                    $("#l4_7").text(json_data[key]['subject']);
+                    }
+
+                  if(json_data[key]['name'] =="l5_2"){
+                    $("#l5_2").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l5_3"){
+                    $("#l5_3").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l5_4"){
+                    $("#l5_4").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l5_5"){
+                    $("#l5_5").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l5_6"){
+                    $("#l5_6").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l5_7"){
+                    $("#l5_7").text(json_data[key]['subject']);
+                    }
+
+                  if(json_data[key]['name'] =="l6_2"){
+                    $("#l6_2").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l6_3"){
+                    $("#l6_3").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l6_4"){
+                    $("#l6_4").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l6_5"){
+                    $("#l6_5").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l6_6"){
+                    $("#l6_6").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l6_7"){
+                    $("#l6_7").text(json_data[key]['subject']);
+                    }
+
+                  if(json_data[key]['name'] =="l7_2"){
+                    $("#l7_2").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l7_3"){
+                    $("#l7_3").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l7_4"){
+                    $("#l7_4").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l7_5"){
+                    $("#l7_5").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l7_6"){
+                    $("#l7_6").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l7_7"){
+                    $("#l7_7").text(json_data[key]['subject']);
+                    }
+
+                  if(json_data[key]['name'] =="l8_2"){
+                    $("#l8_2").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l8_3"){
+                    $("#l8_3").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l8_4"){
+                    $("#l8_4").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l8_5"){
+                    $("#l8_5").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l8_6"){
+                    $("#l8_6").text(json_data[key]['subject']);
+                    }
+                  if(json_data[key]['name'] =="l8_7"){
+                    $("#l8_7").text(json_data[key]['subject']);
+                    }
+
+                }
+                $('.table').slideToggle("fast");
+            })
+            .fail(function(){
+                alert("Lỗi! Không Tìm được")
+            })
+        })
+    })
+</script>
+{% endblock custom_js %}

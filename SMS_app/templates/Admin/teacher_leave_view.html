@@ -1,0 +1,92 @@
+{% extends 'Admin/base_admin.html' %}
+{% block page_title %}
+Giáo Viên Xin Vắng
+{% endblock page_title %}
+{% load static %}
+{% block custom_CSS %}
+<link href="{% static 'SMS/plugins/tables/css/datatable/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock custom_CSS %}
+
+{% block main_content %}
+<div class="content-body">
+
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin_home">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="">Giáo Viên Xin Vắng</a></li>
+                    </ol>
+                </div>
+            </div>
+            <!-- row -->
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Dữ Liệu Giáo Viên Xin Vắng</h4>
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered zero-configuration">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Giáo Viên ID</th>
+                                                <th>Tên Giáo Viên</th>
+                                                <th>Ngày Vắng</th>
+                                                <th>Lí Do</th>
+                                                <th>Ngày Nộp</th>
+                                                <th>Xử Lí</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for leave in leaves %}
+                                            <tr>
+                                                <td>{{ leave.id }}</td>
+                                                <td>{{ leave.teacher_id.admin.id }}</td>
+                                                <td>{{ leave.teacher_id.admin.first_name }} {{ leave.teacher_id.admin.last_name }}</td>
+                                                <td>{{ leave.leave_date }}</td>
+                                                <td>{{ leave.leave_message }}</td>
+                                                <td>{{ leave.created_at }}</td>
+                                                <td>
+                                                    {% if leave.leave_status == 0 %}
+                                                    <a href="{% url 'teacher_approve_leave' leave_id=leave.id %}" class="btn btn-success" >Chấp Nhận</a>
+                                                    <a class="btn btn-danger" href="{% url 'teacher_disapprove_leave' leave_id=leave.id %}" >Từ Chối</a>
+                                                    {% elif leave.leave_status == 1  %}
+                                                     <button class="btn btn-warning" disabled="disabled" data-toggle="modal" data-target="#reply_modal">Đã Chấp Nhận</button>
+                                                    {% else %}
+                                                    <button class="btn btn-danger" disabled="disabled" data-toggle="modal" data-target="#reply_modal">Đã Từ Chối</button>
+                                                    {% endif %}
+                                                </td>
+
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                 <th>ID</th>
+                                                <th>Giáo Viên ID</th>
+                                                <th>Tên Giáo Viên</th>
+                                                <th>Ngày Vắng</th>
+                                                <th>Lí Do</th>
+                                                <th>Ngày Nộp</th>
+                                                <th>Xử Lí</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #/ container -->
+        </div>
+{% endblock main_content %}
+{% block custom_js %}
+    <script src="{% static 'SMS/plugins/tables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/tables/js/datatable/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/tables/js/datatable-init/datatable-basic.min.js' %}"></script>
+
+{% endblock custom_js %}

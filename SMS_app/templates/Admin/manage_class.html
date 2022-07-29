@@ -1,0 +1,425 @@
+{% extends 'Admin/base_admin.html' %}
+{% block page_title %}
+Quản Lí Khoá (Lớp) Học {{id}}
+{% endblock page_title %}
+{% load static %}
+{% block custom_CSS %}
+<link href="{% static 'SMS/plugins/tables/css/datatable/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock custom_CSS %}
+
+{% block main_content %}
+<div class="content-body">
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/{{id}}/admin_home">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="#">Quản Lí Khoá (Lớp) Học</a></li>
+                    </ol>
+                </div>
+            </div>
+            <!-- row -->
+            <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Quản Lí Lớp Học</h4>
+                                <!-- Nav tabs -->
+                                <div class="custom-tab-1">
+                                    <ul class="nav nav-tabs mb-3">
+                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home1">Khối 10</a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile1">Khối 11</a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#contact1">Khối 12</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="home1" role="tabpanel">
+                                            <div class="p-t-15">
+                                                <div class="card-body">
+                                                    <h4 class="card-title">Danh Sách Học Sinh Khối 10</h4>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped verticle-middle">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">ID</th>
+                                                                    <th scope="col">Tên Lớp</th>
+                                                                    <th scope="col">GVCN</th>
+                                                                    <th scope="col">Sỉ Số</th>
+                                                                    <th scope="col">Thao Tác</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                    {% for course in classes_10 %}
+                                                                    <tr>
+                                                                      <td>{{ course.id }}</td>
+                                                                      <td>{{ course.class_name }}</td>
+                                                                      <td>{{ course.GVCN.first_name }} {{ course.GVCN.last_name }}</td>
+                                                                        <td>{{ course.ss }}</td>
+                                                                         <td hidden>{{ course.maths_name }}</td>
+                                                                        <td hidden>{{ course.physics_name }}</td>
+                                                                        <td hidden>{{ course.chemis_name }}</td>
+                                                                        <td hidden>{{ course.bio_name }}</td>
+                                                                         <td hidden>{{ course.history_name }}</td>
+                                                                        <td hidden>{{ course.geo_name }}</td>
+                                                                        <td hidden>{{ course.GDCD_name }}</td>
+                                                                        <td hidden>{{ course.liters_name }}</td>
+                                                                        <td hidden>{{ course.PE_name }}</td>
+                                                                        <td hidden>{{ course.DE_name }}</td>
+                                                                        <td hidden>{{ course.languages_name }}</td>
+                                                                        <td hidden>{{ course.major_name }}</td>
+                                                                        <td hidden>{{ course.computer_name }}</td>
+                                                                        <td hidden>{{ course.tech_name }}</td>
+
+                                                                      <td>  <a href="edit_class/{{ course.id }}" class="btn mb-1 btn-primary">Chỉnh Sửa</a>
+                                                                          <a href="#"  data-toggle="modal" data-target=".bd-example-modal-lg" class="btn mb-1 btn-info show_division">Phân Công</a>
+
+                                                                      </td>
+                                                                    </tr>
+                                                                  {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="profile1">
+                                            <div class="p-t-15">
+                                                <h4 class="card-title">Danh Sách Học Sinh Khối 11</h4>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped verticle-middle">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">ID</th>
+                                                                    <th scope="col">Tên Lớp</th>
+                                                                    <th scope="col">GVCN</th>
+                                                                    <th scope="col">Sỉ Số</th>
+                                                                    <th scope="col">Thao Tác</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                    {% for course in classes_11 %}
+                                                                    <tr>
+                                                                      <td>{{ course.id }}</td>
+                                                                      <td>{{ course.class_name }}</td>
+                                                                      <td>{{ course.GVCN.first_name }} {{ course.GVCN.last_name }}</td>
+                                                                        <td>{{ course.ss }}</td>
+                                                                         <td hidden>{{ course.maths_name}}</td>
+                                                                        <td hidden>{{ course.physics_name }}</td>
+                                                                        <td hidden>{{ course.chemis_name }}</td>
+                                                                        <td hidden>{{ course.bio_name }}</td>
+                                                                         <td hidden>{{ course.history_name }}</td>
+                                                                        <td hidden>{{ course.geo_name }}</td>
+                                                                        <td hidden>{{ course.GDCD_name }}</td>
+                                                                        <td hidden>{{ course.liters_name }}</td>
+                                                                        <td hidden>{{ course.PE_name }}</td>
+                                                                        <td hidden>{{ course.DE_name }}</td>
+                                                                        <td hidden>{{ course.languages_name }}</td>
+                                                                        <td hidden>{{ course.major_name }}</td>
+                                                                        <td hidden>{{ course.computer_name }}</td>
+                                                                        <td hidden>{{ course.tech_name }}</td>
+
+                                                                      <td>  <a href="edit_class/{{ course.id }}" class="btn mb-1 btn-primary">Chỉnh Sửa</a>
+                                                                          <a href="#"  data-toggle="modal" data-target=".bd-example-modal-lg" class="btn mb-1 btn-info show_division">Phân Công</a>
+
+                                                                      </td>
+                                                                    </tr>
+                                                                  {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="contact1">
+                                            <div class="p-t-15">
+                                                <h4 class="card-title">Danh Sách Học Sinh Khối 12</h4>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped verticle-middle">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">ID</th>
+                                                                    <th scope="col">Tên Lớp</th>
+                                                                    <th scope="col">GVCN</th>
+                                                                    <th scope="col">Sỉ Số</th>
+                                                                    <th scope="col">Thao Tác</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                    {% for course in classes_12 %}
+                                                                    <tr>
+                                                                      <td>{{ course.id }}</td>
+                                                                      <td>{{ course.class_name }}</td>
+                                                                      <td>{{ course.GVCN.first_name }} {{ course.GVCN.last_name }}</td>
+                                                                        <td>{{ course.ss }}</td>
+                                                                         <td hidden>{{ course.maths_name }}</td>
+                                                                        <td hidden>{{ course.physics_name }}</td>
+                                                                        <td hidden>{{ course.chemis_name }}</td>
+                                                                        <td hidden>{{ course.bio_name }}</td>
+                                                                         <td hidden>{{ course.history_name }}</td>
+                                                                        <td hidden>{{ course.geo_name }}</td>
+                                                                        <td hidden>{{ course.GDCD_name }}</td>
+                                                                        <td hidden>{{ course.liters_name }}</td>
+                                                                        <td hidden>{{ course.PE_name }}</td>
+                                                                        <td hidden>{{ course.DE_name }}</td>
+                                                                        <td hidden>{{ course.languages_name }}</td>
+                                                                        <td hidden>{{ course.major_name }}</td>
+                                                                        <td hidden>{{ course.computer_name }}</td>
+                                                                         <td hidden>{{ course.tech_name }}</td>
+
+                                                                      <td>  <a href="edit_class/{{ course.id }}" class="btn mb-1 btn-primary">Chỉnh Sửa</a>
+                                                                          <a href="#"  data-toggle="modal" data-target=".bd-example-modal-lg" class="btn mb-1 btn-info show_division">Phân Công</a>
+
+                                                                      </td>
+                                                                    </tr>
+                                                                  {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bảng Phân Công Môn Học <span id="name_span"></span></h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                          <label class="mr-sm-2" for="maths">Toán Học</label>
+                              <select class="custom-select mr-sm-2" id="maths">
+                                <option selected id="maths_name"> </option>
+                                {% for teacher in Maths_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="col">
+                          <label class="mr-sm-2" for="physics">Vật Lí</label>
+                              <select class="custom-select mr-sm-2" id="physics">
+                                 <option selected id="physics_name"></option>
+                                {% for teacher in Physics_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                      </div>
+                    <div class="row">
+                        <div class="col">
+                          <label class="mr-sm-2" for="chemis">Hoá Học</label>
+                              <select class="custom-select mr-sm-2" id="chemis">
+                                 <option selected id="chemis_name"></option>
+                                {% for teacher in Chemis_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="col">
+                          <label class="mr-sm-2" for="bio">Sinh Học</label>
+                              <select class="custom-select mr-sm-2" id="bio">
+                                 <option selected id="bio_name"></option>
+                                {% for teacher in Bio_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                      </div>
+                    <div class="row">
+                        <div class="col">
+                          <label class="mr-sm-2" for="history">Lịch Sử</label>
+                              <select class="custom-select mr-sm-2" id="history">
+                                 <option selected id="history_name"></option>
+                                {% for teacher in socials_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="col">
+                          <label class="mr-sm-2" for="geo">Địa Lí</label>
+                              <select class="custom-select mr-sm-2" id="geo">
+                                 <option selected id="geo_name"></option>
+                                {% for teacher in socials_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                      </div>
+                    <div class="row">
+                        <div class="col">
+                          <label class="mr-sm-2" for="liters">Ngữ Văn</label>
+                              <select class="custom-select mr-sm-2" id="liters">
+                                 <option selected id="liters_name"></option>
+                                {% for teacher in Liters_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="col">
+                          <label class="mr-sm-2" for="GDCD">Giáo Dục Công Dân</label>
+                              <select class="custom-select mr-sm-2" id="GDCD">
+                                 <option selected id="GDCD_name"></option>
+                                {% for teacher in socials_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                      </div>
+                    <div class="row">
+                        <div class="col">
+                          <label class="mr-sm-2" for="computer">Tin Học</label>
+                              <select class="custom-select mr-sm-2" id="computer">
+                                 <option selected id="computer_name"></option>
+                                {% for teacher in IT_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="col">
+                          <label class="mr-sm-2" for="tech">Công Nghệ</label>
+                              <select class="custom-select mr-sm-2" id="tech">
+                                 <option selected id="tech_name"></option>
+                                {% for teacher in IT_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                      </div>
+                    <div class="row">
+                        <div class="col">
+                          <label class="mr-sm-2" for="PE">Thể Dục</label>
+                              <select class="custom-select mr-sm-2" id="PE">
+                                 <option selected id="PE_name"></option>
+                                {% for teacher in PE_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="col">
+                          <label class="mr-sm-2" for="DE">Giáo Dục Quốc Phòng</label>
+                              <select class="custom-select mr-sm-2" id="DE">
+                                 <option selected id="DE_name"></option>
+                                {% for teacher in PE_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                      </div>
+                    <div class="row">
+                        <div class="col">
+                          <label class="mr-sm-2" for="languages">Ngoại Ngữ</label>
+                              <select class="custom-select mr-sm-2" id="languages">
+                                 <option selected id="languages_name"></option>
+                                {% for teacher in Languages_teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="col">
+                          <label class="mr-sm-2" for="major">Chuyên Đề</label>
+                              <select class="custom-select mr-sm-2" id="major">
+                                 <option selected id="major_name"></option>
+                                {% for teacher in teachers %}
+                                <option value="{{teacher.admin.id}}">{{teacher.admin.first_name}} {{teacher.admin.last_name}}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                      </div>
+            </div>
+             <input type="hidden" name="class_id" class="form-control" id="class_id">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary division_btn">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}
+{% block custom_js %}
+    <script src="{% static 'SMS/plugins/tables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/tables/js/datatable/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/tables/js/datatable-init/datatable-basic.min.js' %}"></script>
+<script>
+    $(".show_division").click(function(){
+      var class_id=$(this).parents("tr").children("td:eq(0)").text();
+      var student_name=$(this).parents("tr").children("td:eq(1)").text();
+      var maths_name=$(this).parents("tr").children("td:eq(4)").text();
+      var physics_name=$(this).parents("tr").children("td:eq(5)").text();
+      var chemis_name=$(this).parents("tr").children("td:eq(6)").text();
+      var bio_name=$(this).parents("tr").children("td:eq(7)").text();
+      var history_name=$(this).parents("tr").children("td:eq(8)").text();
+      var geo_name=$(this).parents("tr").children("td:eq(9)").text();
+      var GDCD_name=$(this).parents("tr").children("td:eq(10)").text();
+      var liters_name=$(this).parents("tr").children("td:eq(11)").text();
+      var PE_name=$(this).parents("tr").children("td:eq(12)").text();
+      var DE_name=$(this).parents("tr").children("td:eq(13)").text();
+      var languages_name=$(this).parents("tr").children("td:eq(14)").text();
+      var major_name=$(this).parents("tr").children("td:eq(15)").text();
+      var computer_name=$(this).parents("tr").children("td:eq(16)").text();
+      var tech_name=$(this).parents("tr").children("td:eq(17)").text();
+      console.log(class_id);
+      $("#class_id").val(class_id);
+      $("#name_span").text(student_name);
+      $("#maths_name").text(maths_name);
+      $("#physics_name").text(physics_name);
+      $("#chemis_name").text(chemis_name);
+      $("#bio_name").text(bio_name);
+      $("#history_name").text(history_name);
+      $("#geo_name").text(geo_name);
+       $("#GDCD_name").text(GDCD_name);
+      $("#liters_name").text(liters_name);
+      $("#PE_name").text(PE_name);
+      $("#DE_name").text(DE_name);
+      $("#languages_name").text(languages_name);
+      $("#major_name").text(major_name);
+      $("#computer_name").text(computer_name);
+       $("#tech_name").text(tech_name);
+  });
+
+  $(".division_btn").click(function(){
+      var id=$("#class_id").val();
+      var maths=$("#maths").val();
+      var physics=$("#physics").val();
+      var chemis=$("#chemis").val();
+      var bio=$("#bio").val();
+      var history=$("#history").val();
+      var geo=$("#geo").val();
+      var GDCD=$("#GDCD").val();
+      var liters=$("#liters").val();
+      var PE=$("#PE").val();
+      var DE=$("#DE").val();
+      var languages=$("#languages").val();
+      var major=$("#major").val();
+      var computer=$("#computer").val();
+      var tech=$("#tech").val();
+      division(id,maths,physics,chemis,bio,history,geo,GDCD,liters,PE,DE,languages,major,tech,computer);
+  });
+
+  function division(id,maths,physics,chemis,bio,history,geo,GDCD,liters,PE,DE,languages,major,tech,computer){
+           $.ajax({
+            url:'{% url 'division_teacher_save' %}',
+            type:'POST',
+            data:{id:id,maths:maths,physics:physics,chemis:chemis,bio:bio,
+            history:history,geo:geo,GDCD:GDCD,liters:liters,languages:languages,major:major,
+            tech:tech,computer:computer,PE:PE, DE:DE},
+        })
+        .done(function(response){
+            if(response=="True"){
+                alert("Đã Phân Công Thành Công!");
+            }
+            else{
+                alert("Lỗi! Không Gửi Được");
+            }
+        });
+  }
+</script>
+{% endblock custom_js %}

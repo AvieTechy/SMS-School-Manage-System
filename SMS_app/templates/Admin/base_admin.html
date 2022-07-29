@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SMS | Admin | BroTeam </title>
+     <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'SMS/images/favilogo.png' %}">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{% static 'SMS/plugins/highlightjs/styles/darkula.css' %}">
+    <link href="{% static 'SMS/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'SMS/plugins/tables/css/datatable/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'SMS/plugins/fullcalendar/css/fullcalendar.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'SMS/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css' %}" rel="stylesheet">
+    <!-- Page plugins css -->
+    <link href="{% static 'SMS/plugins/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+    <!-- Color picker plugins css -->
+    <link href="{% static 'SMS/plugins/jquery-asColorPicker-master/css/asColorPicker.css' %}" rel="stylesheet">
+    <!-- Date picker plugins css -->
+    <link href="{% static 'SMS/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+    <!-- Daterange picker plugins css -->
+    <link href="{% static 'SMS/plugins/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+    <link href="{% static 'SMS/plugins/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+
+
+    {% block custom_css %}{% endblock custom_css %}
+
+</head>
+
+<body>
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <div class="brand-logo">
+                <a href="/admin_select_year">
+                    <b class="logo-abbr"><img src="{% static 'images/logo1.png'% }" alt=""> </b>
+                    <span class="logo-compact"><img src="{% static 'SMS/images/logo_text1.png'%}" alt=""></span>
+                    <span class="brand-title">
+                        <img src="{% static 'SMS/images/logo_text1.png'%}" alt="">
+                    </span>
+                </a>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            <div class="header-content clearfix">
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+                <div class="header-left">
+                    <div class="input-group icons">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i class="mdi mdi-magnify"></i></span>
+                        </div>
+                        <input type="search" class="form-control input-rounded" placeholder="Search Dashboard" aria-label="Search Dashboard">
+                        <div class="drop-down d-md-none">
+							<form action="#">
+								<input type="text" class="form-control input-rounded" placeholder="Search">
+							</form>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <li class="icons dropdown">
+                              <blockquote> {% block page_title %}{% endblock page_title %} </blockquote>
+                        </li>
+                        <li class="icons dropdown d-none d-md-flex">
+                                <div class="info">
+                                    <a href="/{{id}}/admin_profile" class="btn mb-1 btn-outline-primary">
+                                        {{ user.username }}</a>
+                                </div>
+                        </li>
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img src="{% static 'SMS/images/user/favalogo.png' %}" height="40" width="40" alt="">
+                            </div>
+                            <div class="drop-down dropdown-profile   dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="/{{id}}/admin_profile"><i class="icon-user"></i> <span>Hồ Sơ</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="email-inbox.html"><i class="icon-envelope-open"></i> <span>Inbox</span> <div class="badge gradient-3 badge-pill badge-primary">3</div></a>
+                                        </li>
+                                        <li>
+                                            <a href="page-lock.html"><i class="icon-lock"></i> <span>Khoá Màn Hình</span></a>
+                                        </li>
+                                        <li><a href="/logout_user"><i class="icon-key"></i> <span>Đăng Xuất</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="nk-sidebar">
+            <div class="nk-nav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li>
+                        {% url 'admin_home' session=id as admin_home %}
+                        <a href="{% url 'admin_home' session=id %}" class=" has-arrow nav-link {% if request.path == admin_home %} active {% endif %}" aria-expanded="false">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Tổng Quan</span>
+                        </a>
+                    </li>
+                    <li class="nav-label">Quản Lí Người Dùng</li>
+                    <li>
+                        {% url '/{{id}}/manage_teacher_in_session' session=id as manage_staff %}
+                                {% url 'edit_teacher' teacher_id=id as edit_staff %}
+                        <a  href="/{{id}}/manage_teacher_in_session" class="nav-link {% if request.path == manage_staff %} active {% endif %} {% if request.path == edit_staff %} active {% endif %}">
+
+                            <i class="icon-user menu-icon"></i> <span class="nav-text">Giáo Viên</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-people menu-icon"></i><span class="nav-text">Học Sinh</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li>
+                                {% url '{{id}}/manage_student' as manage_student %}
+                                {% url 'edit_student' student_id=id as edit_student %}
+                                <a href="/{{id}}/manage_student" class="nav-link {% if request.path == manage_student %} active {% endif %} {% if request.path == edit_student %} active {% endif %}">
+                                    <i class="icon-note menu-icon"></i> Quản Lí
+                                </a>
+                            </li>
+                            <li>
+                                {% url '{{id}}/add_student' as add_student %}
+                                <a href="/{{id}}/add_student" class="nav-link {% if request.path == add_student %} active {% endif %}">
+                                    <i class="icon-user-follow"></i> Thêm
+                                </a>
+                            </li>
+                            <li>
+                                {% url 'student_leave_view' as student_leave_view %}
+                                <a href="{% url 'student_leave_view' session=id%}" class="nav-link {% if request.path == student_leave_view %} active {% endif %}">
+                                <i class="icon-logout"></i> Xin Vắng </a>
+                            </li>
+                            <li>
+                                {% url 'admin_send_notification_student' as admin_send_notification_student %}
+                                <a href="{% url 'admin_send_notification_student' session=id %}" class="nav-link {% if request.path == admin_send_notification_student %} active {% endif %}">
+                                <i class="icon-envelope-open"></i> Thông Báo </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-label">Quản Lí Chung</li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-grid menu-icon"></i> <span class="nav-text"> Khoá (Lớp)</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li>
+                               {% url '{{id}}/manage_class' as manage_course %}
+                                {% url 'edit_class' course_id=id as edit_course %}
+                                <a href="/{{id}}/manage_class" class="nav-link {% if request.path == manage_course %} active {% endif %} {% if request.path == edit_course %} active {% endif %}">
+                                     <i class="icon-note menu-icon"></i> Quản Lí
+                                </a>
+                            </li>
+                            <li>
+                                {% url '{{id}}/add_class' as add_class %}
+                                <a href="/{{id}}/add_class" class="nav-link {% if request.path == add_course %} active {% endif %}">
+                                <i class="icon-user-follow"></i> Thêm </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        {% url 'lession_time_set' session=id as lession_time_set %}
+                        <a href="{% url 'lession_time_set' session=id %}" class=" has-arrow nav-link {% if request.path == lession_time_set %} active {% endif %}" aria-expanded="false">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Thời Khoá Biểu</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-note menu-icon"></i><span class="nav-text">Phản Hồi</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li>
+                                {% url 'teacher_feedback_message' as staff_feedback_message %}
+                                <a href="/{{id}}/teacher_feedback_message" class="nav-link {% if request.path == staff_feedback_message %} active {% endif %}">
+                                    <i class="icon-user menu-icon"></i> Giáo Viên
+                                </a>
+                            </li>
+                            <li>
+                                {% url 'student_feedback_message' as student_feedback_message %}
+                                <a href="{% url 'student_feedback_message' session=id %}" class="nav-link {% if request.path == student_feedback_message %} active {% endif %}">
+                                <i class="icon-people"></i> Học Sinh </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+           {% block main_content %}{% endblock main_content %}
+            <!-- #/ container -->
+
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p> Designed & Developed by <a href="/broteam">BroTeam</a> 2021</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <script src="{% static 'SMS/plugins/common/common.min.js' %}"></script>
+    <script src="{% static 'SMS/js/custom.min.js' %}"></script>
+    <script src="{% static 'SMS/js/settings.js' %}"></script>
+    <script src="{% static 'SMS/js/styleSwitcher.js' %}"></script>
+
+    <script src="{% static 'SMS/plugins/highlightjs/highlight.pack.min.js' %}"></script>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script>
+        (function($) {
+        "use strict"
+
+            new quixSettings({
+                version: "light", //2 options "light" and "dark"
+                layout: "horizontal", //2 options, "vertical" and "horizontal"
+                navheaderBg: "color_1", //have 10 options, "color_1" to "color_10"
+                headerBg: "color_1", //have 10 options, "color_1" to "color_10"
+                sidebarStyle: "vertical", //defines how sidebar should look like, options are: "full", "compact", "mini" and "overlay". If layout is "horizontal", sidebarStyle won't take "overlay" argument anymore, this will turn into "full" automatically!
+                sidebarBg: "color_1", //have 10 options, "color_1" to "color_10"
+                sidebarPosition: "static", //have two options, "static" and "fixed"
+                headerPosition: "static", //have two options, "static" and "fixed"
+                containerLayout: "wide",  //"boxed" and  "wide". If layout "vertical" and containerLayout "boxed", sidebarStyle will automatically turn into "overlay".
+                direction: "ltr" //"ltr" = Left to Right; "rtl" = Right to Left
+            });
+
+
+        })(jQuery);
+    </script>
+    <script src="{% static 'SMS/plugins/moment/moment.js' %}"></script>
+    <script src="{% static 'SMS/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js' %}"></script>
+    <!-- Clock Plugin JavaScript -->
+    <script src="{% static 'SMS/plugins/clockpicker/dist/jquery-clockpicker.min.js' %}"></script>
+    <!-- Color Picker Plugin JavaScript -->
+    <script src="{% static 'SMS/plugins/jquery-asColorPicker-master/libs/jquery-asColor.js' %}"></script>
+    <script src="{% static 'SMS/plugins/jquery-asColorPicker-master/libs/jquery-asGradient.js' %}"></script>
+    <script src="{% static 'SMS/plugins/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js' %}"></script>
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'SMS/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'SMS/plugins/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'SMS/plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+    <script src="{% static 'SMS/js/plugins-init/form-pickers-init.js' %}"></script>
+
+{% block custom_js %}
+{% endblock custom_js %}
+</body>
+
+</html>
